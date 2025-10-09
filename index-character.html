@@ -68,11 +68,9 @@
 
 		/* Main Layout Container */
 		.dashboard {
-			position: fixed;
-			top: 0;
-			left: 0;
+			position: relative;
 			width: 100%;
-			height: 100vh;
+			min-height: 100vh;
 			display: grid;
 			grid-template-columns: 350px 1fr 380px;
 			gap: 0;
@@ -487,19 +485,30 @@
 		@media (max-width: 968px) {
 			.dashboard {
 				grid-template-columns: 1fr;
-				grid-template-rows: auto 60vh auto;
-				padding: 10px;
-				gap: 10px;
+				grid-template-rows: 50vh auto auto;
+				padding: 0;
+				gap: 0;
+				min-height: 100vh;
 			}
 
-			.sidebar, .progress-panel {
-				max-height: none;
-				height: auto;
-				padding: 20px 15px;
+			.sidebar {
+				order: 2;
+				border-right: none;
+				border-top: 1px solid rgba(0, 255, 136, 0.1);
+				padding: 25px 20px;
+			}
+
+			.progress-panel {
+				order: 3;
+				border-left: none;
+				border-top: 1px solid rgba(0, 255, 136, 0.1);
+				padding: 25px 20px;
 			}
 
 			.character-container {
-				order: -1;
+				order: 1;
+				height: 50vh;
+				position: relative;
 			}
 
 			.character-name {
@@ -536,28 +545,37 @@
 
 		@media (max-width: 480px) {
 			.dashboard {
-				grid-template-rows: auto 50vh auto;
-				padding: 5px;
-				gap: 8px;
+				grid-template-rows: 45vh auto auto;
+				padding: 0;
+				gap: 0;
+			}
+
+			.character-container {
+				height: 45vh;
 			}
 
 			.character-name {
-				font-size: 22px;
+				font-size: 24px;
 				letter-spacing: 2px;
+				margin-bottom: 12px;
 			}
 
 			.xp-value, .trophy-value {
-				font-size: 20px;
+				font-size: 22px;
 			}
 
-			.xp-badge, .trophy-icon {
+			.xp-badge {
 				width: 50px;
 				height: 50px;
 				font-size: 24px;
 			}
 
+			.trophy-icon {
+				font-size: 28px;
+			}
+
 			.sidebar, .progress-panel {
-				padding: 15px 10px;
+				padding: 20px 15px;
 			}
 
 			.stat-icon {
@@ -571,7 +589,7 @@
 			}
 
 			.progress-title {
-				font-size: 20px;
+				font-size: 22px;
 				margin-bottom: 20px;
 			}
 
@@ -584,13 +602,21 @@
 			}
 
 			.rank-percentage {
-				font-size: 30px;
+				font-size: 32px;
 			}
 
 			.canvas-hint {
 				bottom: 10px;
 				font-size: 10px;
 				padding: 6px 12px;
+			}
+
+			.xp-section, .trophy-section {
+				margin-bottom: 15px;
+			}
+
+			.stat-item, .skill-progress {
+				margin-bottom: 12px;
 			}
 		}
 
@@ -914,11 +940,11 @@
 		// Initial camera position based on screen size
 		const initialIsMobile = window.innerWidth <= 968;
 		if (initialIsMobile) {
+			charCamera.position.set(0, 0.2, 3);
+			charCamera.lookAt(0, 0.2, 0);
+		} else {
 			charCamera.position.set(0, 0.3, 3.5);
 			charCamera.lookAt(0, 0.3, 0);
-		} else {
-			charCamera.position.set(0, 0.5, 4);
-			charCamera.lookAt(0, 0.5, 0);
 		}
 
 		// Load 3D Character Model
@@ -936,9 +962,9 @@
 
 				// Scale and position the model based on screen size
 				const isMobile = window.innerWidth <= 968;
-				const scale = isMobile ? 0.6 : 0.8;
+				const scale = isMobile ? 0.3 : 0.4;
 				model.scale.set(scale, scale, scale);
-				model.position.y = isMobile ? -0.6 : -0.8;
+				model.position.y = isMobile ? -0.4 : -0.5;
 
 				// Apply custom colors to materials
 				model.traverse((child) => {
@@ -1190,17 +1216,17 @@
 			// Adjust model scale and camera for mobile
 			if (model) {
 				const isMobile = window.innerWidth <= 968;
-				const scale = isMobile ? 0.6 : 0.8;
+				const scale = isMobile ? 0.3 : 0.4;
 				model.scale.set(scale, scale, scale);
-				model.position.y = isMobile ? -0.6 : -0.8;
+				model.position.y = isMobile ? -0.4 : -0.5;
 
 				// Adjust camera position for mobile
 				if (isMobile) {
+					charCamera.position.set(0, 0.2, 3);
+					charCamera.lookAt(0, 0.2, 0);
+				} else {
 					charCamera.position.set(0, 0.3, 3.5);
 					charCamera.lookAt(0, 0.3, 0);
-				} else {
-					charCamera.position.set(0, 0.5, 4);
-					charCamera.lookAt(0, 0.5, 0);
 				}
 			}
 		});
