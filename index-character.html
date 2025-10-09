@@ -39,43 +39,28 @@
 			color: var(--text-primary);
 			overflow-x: hidden;
 			min-height: 100vh;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 20px;
+			padding: 0;
+			margin: 0;
 		}
 
 		/* Mobile Phone Container */
 		.phone-container {
 			width: 100%;
-			max-width: 420px;
-			height: 90vh;
-			max-height: 900px;
+			height: 100vh;
 			background: var(--bg-card);
-			border-radius: 40px;
 			overflow: hidden;
 			position: relative;
-			box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-			border: 8px solid #1a1f2e;
 		}
 
-		/* Top Notch */
+		/* Top Notch - Hidden on mobile */
 		.phone-notch {
-			position: absolute;
-			top: 0;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 150px;
-			height: 30px;
-			background: #0a0e1a;
-			border-radius: 0 0 20px 20px;
-			z-index: 100;
+			display: none;
 		}
 
 		/* Header */
 		.header {
 			position: relative;
-			padding: 45px 20px 15px;
+			padding: 15px 20px;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
@@ -109,7 +94,7 @@
 
 		/* Content Area */
 		.content-area {
-			height: calc(100% - 160px);
+			height: calc(100vh - 150px);
 			overflow-x: hidden;
 			overflow-y: auto;
 			position: relative;
@@ -457,16 +442,9 @@
 			letter-spacing: 1px;
 		}
 
-		/* Bottom indicator */
+		/* Bottom indicator - Hidden on mobile */
 		.phone-indicator {
-			position: absolute;
-			bottom: 5px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 120px;
-			height: 4px;
-			background: rgba(255, 255, 255, 0.3);
-			border-radius: 2px;
+			display: none;
 		}
 
 		/* Loading */
