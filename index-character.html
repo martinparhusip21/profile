@@ -1,0 +1,1102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Martin Parhusip - Game Character Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Martin Parhusip - AI Automation Engineer | Interactive 3D Portfolio" />
+	<meta name="keywords" content="AI Automation Engineer, Python Expert, 3D Portfolio, Three.js" />
+	<meta name="author" content="Martin Parhusip" />
+
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhana:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+	<!-- Three.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		:root {
+			--primary-green: #00ff88;
+			--primary-cyan: #00ffff;
+			--primary-orange: #ff6b35;
+			--primary-purple: #a855f7;
+			--bg-dark: #0a0e1a;
+			--bg-card: rgba(21, 27, 45, 0.9);
+			--text-primary: #ffffff;
+			--text-secondary: #94a3b8;
+		}
+
+		body {
+			font-family: 'Rajdhani', sans-serif;
+			background: #0a0e1a;
+			color: var(--text-primary);
+			overflow-x: hidden;
+			min-height: 100vh;
+		}
+
+		/* 3D Background */
+		#background-canvas {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
+		}
+
+		.grid-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image:
+				linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px);
+			background-size: 50px 50px;
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		/* Main Layout Container */
+		.dashboard {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100vh;
+			display: grid;
+			grid-template-columns: 350px 1fr 380px;
+			gap: 0;
+			z-index: 2;
+			padding: 20px;
+		}
+
+		/* Sidebar Styling */
+		.sidebar {
+			background: rgba(10, 14, 26, 0.75);
+			backdrop-filter: blur(20px);
+			border-right: 1px solid rgba(0, 255, 136, 0.1);
+			padding: 30px 20px;
+			overflow-y: auto;
+		}
+
+		.sidebar::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.sidebar::-webkit-scrollbar-thumb {
+			background: var(--primary-green);
+			border-radius: 3px;
+		}
+
+		/* Character Name */
+		.character-name {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 42px;
+			font-weight: 900;
+			color: var(--primary-green);
+			text-transform: uppercase;
+			letter-spacing: 4px;
+			margin-bottom: 20px;
+			text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+		}
+
+		/* XP Section */
+		.xp-section {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			margin-bottom: 25px;
+		}
+
+		.xp-badge {
+			width: 60px;
+			height: 60px;
+			background: linear-gradient(135deg, var(--primary-green), var(--primary-cyan));
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 28px;
+			box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+		}
+
+		.xp-info {
+			flex: 1;
+		}
+
+		.xp-label {
+			font-size: 11px;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.xp-value {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 28px;
+			font-weight: 700;
+			color: var(--primary-green);
+		}
+
+		.xp-subtext {
+			font-size: 13px;
+			color: var(--text-secondary);
+		}
+
+		/* Trophy Section */
+		.trophy-section {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			padding: 15px;
+			background: rgba(255, 107, 53, 0.1);
+			border: 1px solid rgba(255, 107, 53, 0.3);
+			border-radius: 12px;
+			margin-bottom: 30px;
+		}
+
+		.trophy-icon {
+			font-size: 32px;
+		}
+
+		.trophy-info {
+			flex: 1;
+		}
+
+		.trophy-label {
+			font-size: 11px;
+			color: var(--primary-orange);
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.trophy-value {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 32px;
+			font-weight: 700;
+			color: var(--primary-orange);
+		}
+
+		/* Stats Section */
+		.stats-section {
+			margin-bottom: 10px;
+		}
+
+		.stat-item {
+			margin-bottom: 20px;
+		}
+
+		.stat-header {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 8px;
+		}
+
+		.stat-icon {
+			width: 36px;
+			height: 36px;
+			background: rgba(0, 255, 136, 0.15);
+			border-radius: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 18px;
+		}
+
+		.stat-icon.magic { background: rgba(168, 85, 247, 0.15); }
+		.stat-icon.shield { background: rgba(0, 255, 255, 0.15); }
+		.stat-icon.health { background: rgba(255, 107, 53, 0.15); }
+
+		.stat-name {
+			font-size: 14px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.stat-bar {
+			width: 100%;
+			height: 8px;
+			background: rgba(255, 255, 255, 0.1);
+			border-radius: 4px;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.stat-fill {
+			height: 100%;
+			background: linear-gradient(90deg, var(--primary-green), var(--primary-cyan));
+			border-radius: 4px;
+			position: relative;
+			transition: width 1s ease;
+		}
+
+		.stat-fill.magic { background: linear-gradient(90deg, #a855f7, #ec4899); }
+		.stat-fill.shield { background: linear-gradient(90deg, #00ffff, #00ff88); }
+		.stat-fill.health { background: linear-gradient(90deg, #ff6b35, #fbbf24); }
+
+		.stat-fill::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+			animation: shimmer 2s infinite;
+		}
+
+		@keyframes shimmer {
+			0% { transform: translateX(-100%); }
+			100% { transform: translateX(100%); }
+		}
+
+		/* Center Character Container */
+		.character-container {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05), transparent 70%);
+		}
+
+		#character-canvas {
+			width: 100%;
+			height: 100%;
+			cursor: grab;
+		}
+
+		#character-canvas:active {
+			cursor: grabbing;
+		}
+
+		.canvas-hint {
+			position: absolute;
+			bottom: 30px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: rgba(0, 0, 0, 0.7);
+			backdrop-filter: blur(10px);
+			padding: 10px 20px;
+			border-radius: 20px;
+			font-size: 13px;
+			color: var(--text-secondary);
+			pointer-events: none;
+			opacity: 0.7;
+		}
+
+		/* Right Progress Panel */
+		.progress-panel {
+			background: rgba(10, 14, 26, 0.75);
+			backdrop-filter: blur(20px);
+			border-left: 1px solid rgba(0, 255, 136, 0.1);
+			padding: 30px 20px;
+			overflow-y: auto;
+		}
+
+		.progress-panel::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.progress-panel::-webkit-scrollbar-thumb {
+			background: var(--primary-green);
+			border-radius: 3px;
+		}
+
+		/* Resources */
+		.resources {
+			display: flex;
+			gap: 15px;
+			margin-bottom: 30px;
+		}
+
+		.resource-box {
+			flex: 1;
+			background: rgba(0, 255, 136, 0.1);
+			border: 1px solid rgba(0, 255, 136, 0.3);
+			border-radius: 12px;
+			padding: 12px;
+			text-align: center;
+		}
+
+		.resource-box.gold {
+			background: rgba(255, 193, 7, 0.1);
+			border-color: rgba(255, 193, 7, 0.3);
+		}
+
+		.resource-icon {
+			font-size: 24px;
+			margin-bottom: 5px;
+		}
+
+		.resource-value {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 20px;
+			font-weight: 700;
+			color: var(--primary-green);
+		}
+
+		.resource-box.gold .resource-value {
+			color: #ffc107;
+		}
+
+		/* Progress Title */
+		.progress-title {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 24px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			margin-bottom: 25px;
+			color: var(--primary-green);
+			text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+		}
+
+		/* Skill Progress Items */
+		.skill-progress {
+			margin-bottom: 22px;
+		}
+
+		.skill-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 8px;
+		}
+
+		.skill-name {
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: var(--text-primary);
+		}
+
+		.skill-level {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 12px;
+			font-weight: 700;
+			color: var(--primary-green);
+			background: rgba(0, 255, 136, 0.15);
+			padding: 3px 10px;
+			border-radius: 8px;
+		}
+
+		.skill-bar {
+			width: 100%;
+			height: 10px;
+			background: rgba(255, 255, 255, 0.08);
+			border-radius: 5px;
+			overflow: hidden;
+			position: relative;
+			border: 1px solid rgba(0, 255, 136, 0.2);
+		}
+
+		.skill-fill {
+			height: 100%;
+			background: linear-gradient(90deg, var(--primary-green), var(--primary-cyan));
+			border-radius: 5px;
+			position: relative;
+			transition: width 1.2s ease;
+			box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+		}
+
+		.skill-fill::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+			animation: shimmer 2s infinite;
+		}
+
+		/* Rank Progress */
+		.rank-progress {
+			background: rgba(255, 107, 53, 0.1);
+			border: 1px solid rgba(255, 107, 53, 0.3);
+			border-radius: 15px;
+			padding: 20px;
+			margin-top: 30px;
+		}
+
+		.rank-header {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			margin-bottom: 15px;
+		}
+
+		.rank-icon {
+			font-size: 32px;
+		}
+
+		.rank-info h3 {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 14px;
+			color: var(--primary-orange);
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.rank-info p {
+			font-size: 12px;
+			color: var(--text-secondary);
+		}
+
+		.rank-percentage {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 36px;
+			font-weight: 700;
+			color: var(--primary-orange);
+			text-align: center;
+			margin: 15px 0;
+		}
+
+		.rank-change {
+			font-size: 14px;
+			color: var(--primary-green);
+			text-align: center;
+		}
+
+		.rank-chart {
+			width: 100%;
+			height: 80px;
+			margin-top: 15px;
+		}
+
+		/* Responsive */
+		@media (max-width: 1200px) {
+			.dashboard {
+				grid-template-columns: 300px 1fr 320px;
+			}
+		}
+
+		@media (max-width: 968px) {
+			.dashboard {
+				grid-template-columns: 1fr;
+				grid-template-rows: auto 1fr auto;
+				padding: 10px;
+			}
+
+			.sidebar, .progress-panel {
+				max-height: 40vh;
+			}
+
+			.character-container {
+				height: 50vh;
+			}
+
+			.character-name {
+				font-size: 32px;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.character-name {
+				font-size: 24px;
+			}
+
+			.xp-value, .trophy-value {
+				font-size: 20px;
+			}
+
+			.dashboard {
+				padding: 5px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- 3D Background -->
+	<canvas id="background-canvas"></canvas>
+	<div class="grid-overlay"></div>
+
+	<!-- Main Dashboard Layout -->
+	<div class="dashboard">
+		<!-- Left Sidebar: Stats -->
+		<div class="sidebar">
+			<div class="character-name">MARTIN</div>
+
+			<div class="xp-section">
+				<div class="xp-badge">💎</div>
+				<div class="xp-info">
+					<div class="xp-label">XP on Account</div>
+					<div class="xp-value">460 <span style="font-size: 16px;">XP</span></div>
+					<div class="xp-subtext">1.5 Years Experience</div>
+				</div>
+			</div>
+
+			<div class="trophy-section">
+				<div class="trophy-icon">🏆</div>
+				<div class="trophy-info">
+					<div class="trophy-label">Global Trophies</div>
+					<div class="trophy-value">124</div>
+				</div>
+			</div>
+
+			<div class="stats-section">
+				<div class="stat-item">
+					<div class="stat-header">
+						<div class="stat-icon">⚔️</div>
+						<div class="stat-name">Force Attack</div>
+					</div>
+					<div class="stat-bar">
+						<div class="stat-fill" style="width: 85%"></div>
+					</div>
+				</div>
+
+				<div class="stat-item">
+					<div class="stat-header">
+						<div class="stat-icon magic">🔮</div>
+						<div class="stat-name">Magic Attack</div>
+					</div>
+					<div class="stat-bar">
+						<div class="stat-fill magic" style="width: 70%"></div>
+					</div>
+				</div>
+
+				<div class="stat-item">
+					<div class="stat-header">
+						<div class="stat-icon shield">🛡️</div>
+						<div class="stat-name">Shield Defense</div>
+					</div>
+					<div class="stat-bar">
+						<div class="stat-fill shield" style="width: 95%"></div>
+					</div>
+				</div>
+
+				<div class="stat-item">
+					<div class="stat-header">
+						<div class="stat-icon health">❤️</div>
+						<div class="stat-name">Health</div>
+					</div>
+					<div class="stat-bar">
+						<div class="stat-fill health" style="width: 78%"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Center: 3D Character -->
+		<div class="character-container">
+			<canvas id="character-canvas"></canvas>
+			<div class="canvas-hint">🖱️ Drag to rotate • Click to animate</div>
+		</div>
+
+		<!-- Right Panel: Progress -->
+		<div class="progress-panel">
+			<div class="resources">
+				<div class="resource-box">
+					<div class="resource-icon">💎</div>
+					<div class="resource-value">420</div>
+				</div>
+				<div class="resource-box gold">
+					<div class="resource-icon">🪙</div>
+					<div class="resource-value">37,300</div>
+				</div>
+			</div>
+
+			<div class="progress-title">PROGRESS</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Fight Role</div>
+					<div class="skill-level">LVL 2</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 20%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Flexibility</div>
+					<div class="skill-level">LVL 7</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 70%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Magic Damage</div>
+					<div class="skill-level">LVL 1</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 10%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Specials</div>
+					<div class="skill-level">LVL 3</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 30%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Fight Role</div>
+					<div class="skill-level">LVL 1</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 10%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Control</div>
+					<div class="skill-level">LVL 14</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 100%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Stamina</div>
+					<div class="skill-level">LVL 1</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 10%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">Endurance</div>
+					<div class="skill-level">LVL 8</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 80%"></div>
+				</div>
+			</div>
+
+			<div class="rank-progress">
+				<div class="rank-header">
+					<div class="rank-icon">🏆</div>
+					<div class="rank-info">
+						<h3>Rank Progress</h3>
+						<p>Global Trophy Points</p>
+					</div>
+				</div>
+				<div class="rank-percentage">29.70%</div>
+				<div class="rank-change">📈 +1.22%</div>
+				<canvas class="rank-chart" id="rank-chart"></canvas>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// ===== BACKGROUND PARTICLES =====
+		const bgCanvas = document.getElementById('background-canvas');
+		const bgScene = new THREE.Scene();
+		const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		const bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+		bgRenderer.setSize(window.innerWidth, window.innerHeight);
+		bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+		// Particle system
+		const particleGeometry = new THREE.BufferGeometry();
+		const particleCount = 1000;
+		const positions = new Float32Array(particleCount * 3);
+
+		for (let i = 0; i < particleCount * 3; i++) {
+			positions[i] = (Math.random() - 0.5) * 200;
+		}
+
+		particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+		const particleMaterial = new THREE.PointsMaterial({
+			color: 0x00ff88,
+			size: 0.8,
+			transparent: true,
+			opacity: 0.6,
+			blending: THREE.AdditiveBlending
+		});
+
+		const particles = new THREE.Points(particleGeometry, particleMaterial);
+		bgScene.add(particles);
+
+		bgCamera.position.z = 50;
+
+		function animateBackground() {
+			requestAnimationFrame(animateBackground);
+			particles.rotation.y += 0.0005;
+			particles.rotation.x += 0.0002;
+			bgRenderer.render(bgScene, bgCamera);
+		}
+		animateBackground();
+
+		// ===== CHARACTER CANVAS =====
+		const charCanvas = document.getElementById('character-canvas');
+		const charScene = new THREE.Scene();
+		const charCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+		const charRenderer = new THREE.WebGLRenderer({ canvas: charCanvas, alpha: true, antialias: true });
+
+		function resizeCharacterCanvas() {
+			const container = charCanvas.parentElement;
+			const width = container.offsetWidth;
+			const height = container.offsetHeight;
+			charCamera.aspect = width / height;
+			charCamera.updateProjectionMatrix();
+			charRenderer.setSize(width, height);
+			charRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		}
+		resizeCharacterCanvas();
+
+		// Lighting
+		const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+		charScene.add(ambientLight);
+
+		const hemisphereLight = new THREE.HemisphereLight(0x00ffff, 0xff6b35, 0.6);
+		charScene.add(hemisphereLight);
+
+		const directionalLight = new THREE.DirectionalLight(0x00ff88, 1.2);
+		directionalLight.position.set(5, 10, 7.5);
+		directionalLight.castShadow = true;
+		charScene.add(directionalLight);
+
+		// Create stylized humanoid character
+		const character = new THREE.Group();
+
+		// Body
+		const bodyGeometry = new THREE.CylinderGeometry(0.8, 1, 2.5, 8);
+		const bodyMaterial = new THREE.MeshPhongMaterial({
+			color: 0x00ff88,
+			emissive: 0x00ff88,
+			emissiveIntensity: 0.3,
+			shininess: 100,
+			flatShading: true
+		});
+		const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+		body.position.y = 0;
+		character.add(body);
+
+		// Head
+		const headGeometry = new THREE.SphereGeometry(0.8, 12, 12);
+		const headMaterial = new THREE.MeshPhongMaterial({
+			color: 0x00ffff,
+			emissive: 0x00ffff,
+			emissiveIntensity: 0.4,
+			shininess: 100,
+			flatShading: true
+		});
+		const head = new THREE.Mesh(headGeometry, headMaterial);
+		head.position.y = 2.3;
+		character.add(head);
+
+		// Eyes
+		const eyeGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+		const eyeMaterial = new THREE.MeshPhongMaterial({
+			color: 0xff6b35,
+			emissive: 0xff6b35,
+			emissiveIntensity: 0.8
+		});
+		const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+		leftEye.position.set(-0.25, 2.5, 0.65);
+		character.add(leftEye);
+
+		const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+		rightEye.position.set(0.25, 2.5, 0.65);
+		character.add(rightEye);
+
+		// Arms
+		const armGeometry = new THREE.CapsuleGeometry(0.25, 1.5, 8, 16);
+		const armMaterial = new THREE.MeshPhongMaterial({
+			color: 0xa855f7,
+			emissive: 0xa855f7,
+			emissiveIntensity: 0.3,
+			shininess: 100,
+			flatShading: true
+		});
+
+		const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+		leftArm.position.set(-1.2, 0.5, 0);
+		leftArm.rotation.z = 0.3;
+		character.add(leftArm);
+
+		const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+		rightArm.position.set(1.2, 0.5, 0);
+		rightArm.rotation.z = -0.3;
+		character.add(rightArm);
+
+		// Legs
+		const legGeometry = new THREE.CapsuleGeometry(0.3, 1.8, 8, 16);
+		const legMaterial = new THREE.MeshPhongMaterial({
+			color: 0x00ff88,
+			emissive: 0x00ff88,
+			emissiveIntensity: 0.2,
+			shininess: 100,
+			flatShading: true
+		});
+
+		const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+		leftLeg.position.set(-0.4, -2.2, 0);
+		character.add(leftLeg);
+
+		const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+		rightLeg.position.set(0.4, -2.2, 0);
+		character.add(rightLeg);
+
+		// Wireframe overlay
+		const wireframeGeometry = new THREE.IcosahedronGeometry(3, 0);
+		const wireframeMaterial = new THREE.MeshBasicMaterial({
+			color: 0x00ff88,
+			wireframe: true,
+			transparent: true,
+			opacity: 0.15
+		});
+		const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+		character.add(wireframe);
+
+		charScene.add(character);
+		charCamera.position.set(0, 0, 12);
+		charCamera.lookAt(0, 0, 0);
+
+		// Mouse interaction
+		let isDragging = false;
+		let previousMousePosition = { x: 0, y: 0 };
+		let targetRotation = { x: 0, y: 0 };
+		let currentRotation = { x: 0, y: 0 };
+		let isAnimating = false;
+
+		charCanvas.addEventListener('mousedown', (e) => {
+			isDragging = true;
+			previousMousePosition = { x: e.clientX, y: e.clientY };
+		});
+
+		charCanvas.addEventListener('mousemove', (e) => {
+			if (isDragging) {
+				const deltaX = e.clientX - previousMousePosition.x;
+				const deltaY = e.clientY - previousMousePosition.y;
+
+				targetRotation.y += deltaX * 0.01;
+				targetRotation.x += deltaY * 0.01;
+				targetRotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, targetRotation.x));
+
+				previousMousePosition = { x: e.clientX, y: e.clientY };
+			}
+		});
+
+		charCanvas.addEventListener('mouseup', () => {
+			isDragging = false;
+		});
+
+		charCanvas.addEventListener('mouseleave', () => {
+			isDragging = false;
+		});
+
+		// Touch support
+		charCanvas.addEventListener('touchstart', (e) => {
+			isDragging = true;
+			previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+		});
+
+		charCanvas.addEventListener('touchmove', (e) => {
+			if (isDragging) {
+				const deltaX = e.touches[0].clientX - previousMousePosition.x;
+				const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+				targetRotation.y += deltaX * 0.01;
+				targetRotation.x += deltaY * 0.01;
+				targetRotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, targetRotation.x));
+
+				previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+			}
+		});
+
+		charCanvas.addEventListener('touchend', () => {
+			isDragging = false;
+		});
+
+		// Click animation
+		charCanvas.addEventListener('click', () => {
+			if (!isAnimating) {
+				isAnimating = true;
+				const animations = [
+					() => {
+						// Jump
+						const startY = character.position.y;
+						const jumpHeight = 1.5;
+						const duration = 1000;
+						const startTime = Date.now();
+
+						function jump() {
+							const elapsed = Date.now() - startTime;
+							const progress = elapsed / duration;
+
+							if (progress < 1) {
+								const easeProgress = progress < 0.5
+									? 2 * progress * progress
+									: 1 - Math.pow(-2 * progress + 2, 2) / 2;
+								character.position.y = startY + Math.sin(easeProgress * Math.PI) * jumpHeight;
+								requestAnimationFrame(jump);
+							} else {
+								character.position.y = startY;
+								isAnimating = false;
+							}
+						}
+						jump();
+					},
+					() => {
+						// Spin
+						const spinRotations = 2;
+						const duration = 1500;
+						const startTime = Date.now();
+						const startRotation = targetRotation.y;
+
+						function spin() {
+							const elapsed = Date.now() - startTime;
+							const progress = elapsed / duration;
+
+							if (progress < 1) {
+								targetRotation.y = startRotation + (spinRotations * Math.PI * 2 * progress);
+								requestAnimationFrame(spin);
+							} else {
+								isAnimating = false;
+							}
+						}
+						spin();
+					},
+					() => {
+						// Wave arms
+						const duration = 1000;
+						const startTime = Date.now();
+
+						function wave() {
+							const elapsed = Date.now() - startTime;
+							const progress = elapsed / duration;
+
+							if (progress < 1) {
+								leftArm.rotation.z = 0.3 + Math.sin(progress * Math.PI * 4) * 0.5;
+								rightArm.rotation.z = -0.3 - Math.sin(progress * Math.PI * 4) * 0.5;
+								requestAnimationFrame(wave);
+							} else {
+								leftArm.rotation.z = 0.3;
+								rightArm.rotation.z = -0.3;
+								isAnimating = false;
+							}
+						}
+						wave();
+					}
+				];
+
+				const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+				randomAnimation();
+			}
+		});
+
+		function animateCharacter() {
+			requestAnimationFrame(animateCharacter);
+
+			// Smooth rotation
+			currentRotation.x += (targetRotation.x - currentRotation.x) * 0.1;
+			currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
+
+			character.rotation.x = currentRotation.x;
+			character.rotation.y = currentRotation.y;
+
+			// Idle animations
+			if (!isDragging && !isAnimating) {
+				targetRotation.y += 0.002;
+				head.rotation.y = Math.sin(Date.now() * 0.001) * 0.3;
+				head.rotation.x = Math.sin(Date.now() * 0.0008) * 0.1;
+
+				leftArm.rotation.z = 0.3 + Math.sin(Date.now() * 0.001) * 0.1;
+				rightArm.rotation.z = -0.3 - Math.sin(Date.now() * 0.001) * 0.1;
+			}
+
+			// Pulsing lights
+			directionalLight.intensity = 1.2 + Math.sin(Date.now() * 0.001) * 0.2;
+			wireframe.rotation.y += 0.005;
+			wireframe.rotation.x += 0.003;
+
+			charRenderer.render(charScene, charCamera);
+		}
+		animateCharacter();
+
+		// Rank chart
+		const rankChartCanvas = document.getElementById('rank-chart');
+		const ctx = rankChartCanvas.getContext('2d');
+		rankChartCanvas.width = rankChartCanvas.offsetWidth * 2;
+		rankChartCanvas.height = rankChartCanvas.offsetHeight * 2;
+
+		function drawRankChart() {
+			const width = rankChartCanvas.width;
+			const height = rankChartCanvas.height;
+			const points = 50;
+			const data = [];
+
+			for (let i = 0; i < points; i++) {
+				data.push(Math.random() * 0.4 + 0.3 + Math.sin(i * 0.2) * 0.2);
+			}
+
+			ctx.clearRect(0, 0, width, height);
+
+			// Draw gradient fill
+			const gradient = ctx.createLinearGradient(0, 0, 0, height);
+			gradient.addColorStop(0, 'rgba(255, 107, 53, 0.4)');
+			gradient.addColorStop(1, 'rgba(255, 107, 53, 0)');
+
+			ctx.beginPath();
+			ctx.moveTo(0, height);
+
+			for (let i = 0; i < points; i++) {
+				const x = (i / (points - 1)) * width;
+				const y = height - (data[i] * height);
+				ctx.lineTo(x, y);
+			}
+
+			ctx.lineTo(width, height);
+			ctx.closePath();
+			ctx.fillStyle = gradient;
+			ctx.fill();
+
+			// Draw line
+			ctx.beginPath();
+			for (let i = 0; i < points; i++) {
+				const x = (i / (points - 1)) * width;
+				const y = height - (data[i] * height);
+
+				if (i === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.strokeStyle = '#ff6b35';
+			ctx.lineWidth = 4;
+			ctx.stroke();
+		}
+		drawRankChart();
+
+		// Resize handler
+		window.addEventListener('resize', () => {
+			bgCamera.aspect = window.innerWidth / window.innerHeight;
+			bgCamera.updateProjectionMatrix();
+			bgRenderer.setSize(window.innerWidth, window.innerHeight);
+
+			resizeCharacterCanvas();
+		});
+	</script>
+</body>
+</html>
