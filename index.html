@@ -3,13 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Martin Parhusip - 3D Character Profile</title>
+	<title>Martin Parhusip - 3D Interactive Portfolio</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Martin Parhusip - AI Automation Engineer with 3D interactive portfolio" />
-	<meta name="keywords" content="AI Automation Engineer, Python Expert, 3D Portfolio, Interactive Resume" />
+	<meta name="description" content="Martin Parhusip - AI Automation Engineer with 3D interactive portfolio powered by Three.js" />
+	<meta name="keywords" content="AI Automation Engineer, Python Expert, 3D Portfolio, Three.js, Interactive Resume" />
 	<meta name="author" content="Martin Parhusip" />
 
 	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+	<!-- Three.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 	<style>
 		* {
@@ -24,8 +27,8 @@
 			--primary-orange: #ff6b35;
 			--primary-purple: #a855f7;
 			--bg-dark: #0a0e1a;
-			--bg-card: rgba(21, 27, 45, 0.8);
-			--bg-glass: rgba(21, 27, 45, 0.6);
+			--bg-card: rgba(21, 27, 45, 0.85);
+			--bg-glass: rgba(21, 27, 45, 0.65);
 			--bg-darker: #0d1117;
 			--text-primary: #ffffff;
 			--text-secondary: #94a3b8;
@@ -33,29 +36,20 @@
 
 		body {
 			font-family: 'Rajdhani', sans-serif;
-			background: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 100%);
+			background: #0a0e1a;
 			color: var(--text-primary);
 			overflow-x: hidden;
 			min-height: 100vh;
 		}
 
-		/* Animated Background */
-		.animated-bg {
+		/* 3D Background Canvas */
+		#background-canvas {
 			position: fixed;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background:
-				radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
-				radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
 			z-index: 0;
-			animation: bgShift 20s ease-in-out infinite;
-		}
-
-		@keyframes bgShift {
-			0%, 100% { opacity: 0.5; }
-			50% { opacity: 1; }
 		}
 
 		.grid-overlay {
@@ -72,7 +66,6 @@
 			z-index: 1;
 		}
 
-		/* Container */
 		.container {
 			position: relative;
 			z-index: 2;
@@ -88,8 +81,8 @@
 			align-items: center;
 			padding: 15px 25px;
 			background: var(--bg-glass);
-			backdrop-filter: blur(10px);
-			border: 1px solid rgba(0, 255, 136, 0.1);
+			backdrop-filter: blur(15px);
+			border: 1px solid rgba(0, 255, 136, 0.15);
 			border-radius: 20px;
 			margin-bottom: 20px;
 		}
@@ -101,7 +94,7 @@
 			color: var(--primary-green);
 			text-transform: uppercase;
 			letter-spacing: 3px;
-			text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+			text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
 		}
 
 		.stats-mini {
@@ -118,11 +111,6 @@
 			font-weight: 600;
 		}
 
-		.stat-mini-icon {
-			width: 24px;
-			height: 24px;
-		}
-
 		.stat-mini-value {
 			font-family: 'Orbitron', sans-serif;
 			color: var(--primary-green);
@@ -135,10 +123,9 @@
 			gap: 20px;
 		}
 
-		/* Desktop Layout */
 		@media (min-width: 1024px) {
 			.main-content {
-				grid-template-columns: 400px 1fr;
+				grid-template-columns: 420px 1fr;
 				grid-template-rows: auto auto;
 			}
 
@@ -150,13 +137,14 @@
 		/* Glassmorphism Card */
 		.glass-card {
 			background: var(--bg-glass);
-			backdrop-filter: blur(20px);
+			backdrop-filter: blur(25px);
+			-webkit-backdrop-filter: blur(25px);
 			border: 1px solid rgba(0, 255, 136, 0.15);
 			border-radius: 24px;
 			padding: 30px;
 			position: relative;
 			overflow: hidden;
-			transition: all 0.3s ease;
+			transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		}
 
 		.glass-card::before {
@@ -170,45 +158,55 @@
 		}
 
 		.glass-card:hover {
-			border-color: rgba(0, 255, 136, 0.3);
-			box-shadow: 0 15px 50px rgba(0, 255, 136, 0.1);
+			border-color: rgba(0, 255, 136, 0.35);
+			box-shadow: 0 20px 60px rgba(0, 255, 136, 0.15);
 			transform: translateY(-5px);
 		}
 
 		/* Character Section */
-		.character-section {
-			position: relative;
-		}
-
 		.character-3d-container {
 			width: 100%;
-			height: 500px;
-			background: linear-gradient(135deg, rgba(26, 31, 58, 0.5), rgba(10, 14, 26, 0.5));
+			height: 520px;
+			background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(10, 14, 26, 0.8));
 			border-radius: 20px;
 			margin-bottom: 25px;
 			position: relative;
 			overflow: hidden;
-			border: 2px solid rgba(0, 255, 136, 0.2);
+			border: 2px solid rgba(0, 255, 136, 0.25);
+			box-shadow: 0 0 40px rgba(0, 255, 136, 0.1) inset;
 		}
 
 		#character-canvas {
 			width: 100%;
 			height: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 180px;
-			position: relative;
+			cursor: grab;
 		}
 
-		.character-emoji {
-			animation: float 3s ease-in-out infinite;
-			filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.3));
+		#character-canvas:active {
+			cursor: grabbing;
 		}
 
-		@keyframes float {
-			0%, 100% { transform: translateY(0px) scale(1); }
-			50% { transform: translateY(-20px) scale(1.05); }
+		.canvas-hint {
+			position: absolute;
+			bottom: 15px;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 12px;
+			color: var(--text-secondary);
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			background: rgba(0, 0, 0, 0.5);
+			padding: 8px 16px;
+			border-radius: 20px;
+			border: 1px solid rgba(0, 255, 136, 0.2);
+			backdrop-filter: blur(10px);
+			pointer-events: none;
+			animation: pulse 2s infinite;
+		}
+
+		@keyframes pulse {
+			0%, 100% { opacity: 0.6; }
+			50% { opacity: 1; }
 		}
 
 		.character-name-big {
@@ -233,7 +231,7 @@
 			margin-bottom: 30px;
 		}
 
-		/* XP Progress */
+		/* XP Section */
 		.xp-section {
 			background: var(--bg-darker);
 			padding: 20px;
@@ -261,11 +259,12 @@
 			font-size: 22px;
 			font-weight: 700;
 			color: var(--primary-green);
+			text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 		}
 
 		.xp-bar {
 			height: 10px;
-			background: rgba(0, 0, 0, 0.4);
+			background: rgba(0, 0, 0, 0.5);
 			border-radius: 10px;
 			overflow: hidden;
 			position: relative;
@@ -276,7 +275,7 @@
 			background: linear-gradient(90deg, var(--primary-green), var(--primary-cyan));
 			border-radius: 10px;
 			position: relative;
-			animation: pulse 2s infinite;
+			box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
 		}
 
 		.xp-fill::after {
@@ -286,8 +285,8 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-			animation: shimmer 2s infinite;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+			animation: shimmer 2.5s infinite;
 		}
 
 		@keyframes shimmer {
@@ -301,15 +300,16 @@
 			padding: 20px;
 			border-radius: 16px;
 			margin-bottom: 20px;
-			border: 1px solid rgba(255, 107, 53, 0.3);
+			border: 1px solid rgba(255, 107, 53, 0.35);
 			display: flex;
 			align-items: center;
 			gap: 15px;
+			box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
 		}
 
 		.trophy-icon {
 			font-size: 40px;
-			filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.5));
+			filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.6));
 		}
 
 		.trophy-info h3 {
@@ -325,6 +325,7 @@
 			font-size: 32px;
 			font-weight: 700;
 			color: var(--primary-orange);
+			text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
 		}
 
 		/* Quick Stats */
@@ -340,6 +341,13 @@
 			border-radius: 12px;
 			text-align: center;
 			border: 1px solid rgba(0, 255, 136, 0.2);
+			transition: all 0.3s ease;
+		}
+
+		.quick-stat:hover {
+			border-color: var(--primary-green);
+			box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+			transform: scale(1.05);
 		}
 
 		.quick-stat-icon {
@@ -353,6 +361,7 @@
 			font-weight: 700;
 			color: var(--primary-green);
 			margin-bottom: 5px;
+			text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
 		}
 
 		.quick-stat-label {
@@ -375,13 +384,13 @@
 			border: 1px solid rgba(0, 255, 136, 0.15);
 			border-radius: 20px;
 			padding: 25px;
-			transition: all 0.3s ease;
+			transition: all 0.4s ease;
 		}
 
 		.skill-card:hover {
-			border-color: rgba(0, 255, 136, 0.4);
-			box-shadow: 0 10px 40px rgba(0, 255, 136, 0.15);
-			transform: translateY(-5px);
+			border-color: rgba(0, 255, 136, 0.45);
+			box-shadow: 0 15px 50px rgba(0, 255, 136, 0.2);
+			transform: translateY(-8px);
 		}
 
 		.skill-header {
@@ -412,7 +421,7 @@
 			background: var(--bg-darker);
 			padding: 5px 15px;
 			border-radius: 20px;
-			border: 1px solid rgba(0, 255, 136, 0.2);
+			border: 1px solid rgba(0, 255, 136, 0.25);
 		}
 
 		.skill-bar-container {
@@ -427,7 +436,8 @@
 			height: 100%;
 			border-radius: 10px;
 			position: relative;
-			transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+			transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+			box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
 		}
 
 		.skill-bar-fill::after {
@@ -437,8 +447,8 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-			animation: skillGlow 2s infinite;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+			animation: skillGlow 2.5s infinite;
 		}
 
 		@keyframes skillGlow {
@@ -446,7 +456,7 @@
 			100% { transform: translateX(100%); }
 		}
 
-		/* Achievement Badges */
+		/* Achievements Section */
 		.achievements-section {
 			margin-top: 30px;
 		}
@@ -459,6 +469,7 @@
 			letter-spacing: 2px;
 			margin-bottom: 20px;
 			color: var(--primary-green);
+			text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
 		}
 
 		.achievements-grid {
@@ -470,7 +481,7 @@
 		.achievement-badge {
 			aspect-ratio: 1;
 			background: var(--bg-darker);
-			border: 2px solid rgba(0, 255, 136, 0.2);
+			border: 2px solid rgba(0, 255, 136, 0.25);
 			border-radius: 16px;
 			display: flex;
 			flex-direction: column;
@@ -478,7 +489,7 @@
 			justify-content: center;
 			gap: 10px;
 			cursor: pointer;
-			transition: all 0.3s ease;
+			transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 			position: relative;
 			overflow: hidden;
 		}
@@ -490,24 +501,30 @@
 			left: -50%;
 			width: 200%;
 			height: 200%;
-			background: radial-gradient(circle, rgba(0, 255, 136, 0.1), transparent 70%);
+			background: radial-gradient(circle, rgba(0, 255, 136, 0.15), transparent 70%);
 			opacity: 0;
-			transition: opacity 0.3s ease;
+			transition: opacity 0.4s ease;
 		}
 
 		.achievement-badge:hover::before {
 			opacity: 1;
+			animation: rotate 3s linear infinite;
+		}
+
+		@keyframes rotate {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
 		}
 
 		.achievement-badge:hover {
 			border-color: var(--primary-green);
-			box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
-			transform: translateY(-8px) scale(1.05);
+			box-shadow: 0 0 35px rgba(0, 255, 136, 0.5);
+			transform: translateY(-10px) scale(1.08);
 		}
 
 		.achievement-icon {
 			font-size: 36px;
-			filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
+			filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.4));
 		}
 
 		.achievement-name {
@@ -529,7 +546,13 @@
 			background: var(--bg-darker);
 			padding: 20px;
 			border-radius: 16px;
-			border: 1px solid rgba(0, 255, 136, 0.15);
+			border: 1px solid rgba(0, 255, 136, 0.18);
+			transition: all 0.3s ease;
+		}
+
+		.metric-item:hover {
+			border-color: rgba(0, 255, 136, 0.35);
+			transform: translateX(5px);
 		}
 
 		.metric-label {
@@ -546,11 +569,12 @@
 			font-weight: 700;
 			color: var(--primary-green);
 			margin-bottom: 12px;
+			text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
 		}
 
 		.metric-bar {
 			height: 8px;
-			background: rgba(0, 0, 0, 0.4);
+			background: rgba(0, 0, 0, 0.5);
 			border-radius: 10px;
 			overflow: hidden;
 		}
@@ -558,7 +582,8 @@
 		.metric-fill {
 			height: 100%;
 			border-radius: 10px;
-			transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+			transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+			box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
 		}
 
 		/* Experience Timeline */
@@ -570,7 +595,7 @@
 			position: relative;
 			padding-left: 40px;
 			margin-bottom: 35px;
-			border-left: 2px solid rgba(0, 255, 136, 0.2);
+			border-left: 2px solid rgba(0, 255, 136, 0.25);
 		}
 
 		.timeline-item::before {
@@ -582,7 +607,13 @@
 			height: 16px;
 			background: var(--primary-green);
 			border-radius: 50%;
-			box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+			box-shadow: 0 0 25px rgba(0, 255, 136, 0.7);
+			animation: glow 2s infinite;
+		}
+
+		@keyframes glow {
+			0%, 100% { box-shadow: 0 0 25px rgba(0, 255, 136, 0.7); }
+			50% { box-shadow: 0 0 35px rgba(0, 255, 136, 1); }
 		}
 
 		.timeline-title {
@@ -639,7 +670,7 @@
 			width: 50px;
 			height: 50px;
 			background: var(--bg-darker);
-			border: 2px solid rgba(0, 255, 136, 0.2);
+			border: 2px solid rgba(0, 255, 136, 0.25);
 			border-radius: 14px;
 			display: flex;
 			align-items: center;
@@ -647,14 +678,57 @@
 			color: var(--text-primary);
 			text-decoration: none;
 			font-size: 22px;
-			transition: all 0.3s ease;
+			transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		}
 
 		.social-link:hover {
 			border-color: var(--primary-green);
-			background: rgba(0, 255, 136, 0.1);
-			transform: translateY(-5px);
-			box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+			background: rgba(0, 255, 136, 0.15);
+			transform: translateY(-8px) rotate(5deg);
+			box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+		}
+
+		/* Loading Screen */
+		.loading {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--bg-dark);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			z-index: 9999;
+			transition: opacity 0.6s ease;
+		}
+
+		.loading.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.loader {
+			width: 70px;
+			height: 70px;
+			border: 5px solid rgba(0, 255, 136, 0.2);
+			border-top-color: var(--primary-green);
+			border-radius: 50%;
+			animation: spin 1.2s linear infinite;
+		}
+
+		.loading-text {
+			margin-top: 20px;
+			font-family: 'Orbitron', sans-serif;
+			font-size: 14px;
+			color: var(--primary-green);
+			text-transform: uppercase;
+			letter-spacing: 2px;
+		}
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
 		}
 
 		/* Responsive */
@@ -673,6 +747,10 @@
 				font-size: 36px;
 			}
 
+			.character-3d-container {
+				height: 400px;
+			}
+
 			.achievements-grid {
 				grid-template-columns: repeat(2, 1fr);
 			}
@@ -686,48 +764,20 @@
 			.quick-stats {
 				grid-template-columns: 1fr;
 			}
-		}
 
-		/* Loading Animation */
-		.loading {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: var(--bg-dark);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			z-index: 9999;
-			transition: opacity 0.5s ease;
-		}
-
-		.loading.hidden {
-			opacity: 0;
-			pointer-events: none;
-		}
-
-		.loader {
-			width: 60px;
-			height: 60px;
-			border: 4px solid rgba(0, 255, 136, 0.2);
-			border-top-color: var(--primary-green);
-			border-radius: 50%;
-			animation: spin 1s linear infinite;
-		}
-
-		@keyframes spin {
-			to { transform: rotate(360deg); }
+			.logo {
+				font-size: 18px;
+			}
 		}
 	</style>
 </head>
 <body>
 	<div class="loading" id="loading">
 		<div class="loader"></div>
+		<div class="loading-text">Initializing 3D Engine...</div>
 	</div>
 
-	<div class="animated-bg"></div>
+	<canvas id="background-canvas"></canvas>
 	<div class="grid-overlay"></div>
 
 	<div class="container">
@@ -736,11 +786,11 @@
 			<div class="logo">MARTIN PARHUSIP</div>
 			<div class="stats-mini">
 				<div class="stat-mini">
-					<span class="stat-mini-icon">💎</span>
+					<span>💎</span>
 					<span class="stat-mini-value">LVL 95</span>
 				</div>
 				<div class="stat-mini">
-					<span class="stat-mini-icon">🏆</span>
+					<span>🏆</span>
 					<span class="stat-mini-value">3+ Projects</span>
 				</div>
 			</div>
@@ -751,9 +801,8 @@
 			<!-- Character Section -->
 			<div class="glass-card character-section">
 				<div class="character-3d-container">
-					<div id="character-canvas">
-						<div class="character-emoji">👨‍💻</div>
-					</div>
+					<canvas id="character-canvas"></canvas>
+					<div class="canvas-hint">🖱️ Drag to rotate</div>
 				</div>
 
 				<h1 class="character-name-big">MARTIN</h1>
@@ -1046,11 +1095,242 @@
 	</div>
 
 	<script>
+		// ========================================
+		// THREE.JS BACKGROUND PARTICLES
+		// ========================================
+		const bgScene = new THREE.Scene();
+		const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		const bgRenderer = new THREE.WebGLRenderer({
+			canvas: document.getElementById('background-canvas'),
+			alpha: true,
+			antialias: true
+		});
+
+		bgRenderer.setSize(window.innerWidth, window.innerHeight);
+		bgRenderer.setPixelRatio(window.devicePixelRatio);
+		bgCamera.position.z = 50;
+
+		// Create particles
+		const particleGeometry = new THREE.BufferGeometry();
+		const particleCount = 800;
+		const positions = new Float32Array(particleCount * 3);
+
+		for (let i = 0; i < particleCount * 3; i++) {
+			positions[i] = (Math.random() - 0.5) * 200;
+		}
+
+		particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+		const particleMaterial = new THREE.PointsMaterial({
+			color: 0x00ff88,
+			size: 0.8,
+			transparent: true,
+			opacity: 0.6,
+			blending: THREE.AdditiveBlending
+		});
+
+		const particles = new THREE.Points(particleGeometry, particleMaterial);
+		bgScene.add(particles);
+
+		// Animate background
+		function animateBackground() {
+			requestAnimationFrame(animateBackground);
+			particles.rotation.y += 0.0005;
+			particles.rotation.x += 0.0002;
+			bgRenderer.render(bgScene, bgCamera);
+		}
+		animateBackground();
+
+		// ========================================
+		// THREE.JS CHARACTER MODEL
+		// ========================================
+		const charScene = new THREE.Scene();
+		const charCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+		const charCanvas = document.getElementById('character-canvas');
+		const charRenderer = new THREE.WebGLRenderer({
+			canvas: charCanvas,
+			alpha: true,
+			antialias: true
+		});
+
+		// Set canvas size
+		const containerWidth = charCanvas.parentElement.offsetWidth;
+		const containerHeight = charCanvas.parentElement.offsetHeight;
+		charRenderer.setSize(containerWidth, containerHeight);
+		charRenderer.setPixelRatio(window.devicePixelRatio);
+		charCamera.aspect = containerWidth / containerHeight;
+		charCamera.updateProjectionMatrix();
+		charCamera.position.z = 5;
+
+		// Add lights
+		const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+		charScene.add(ambientLight);
+
+		const pointLight1 = new THREE.PointLight(0x00ff88, 1.5, 100);
+		pointLight1.position.set(5, 5, 5);
+		charScene.add(pointLight1);
+
+		const pointLight2 = new THREE.PointLight(0x00ffff, 1, 100);
+		pointLight2.position.set(-5, -5, 5);
+		charScene.add(pointLight2);
+
+		const pointLight3 = new THREE.PointLight(0xa855f7, 0.8, 100);
+		pointLight3.position.set(0, 5, -5);
+		charScene.add(pointLight3);
+
+		// Create 3D character (geometric abstract representation)
+		const characterGroup = new THREE.Group();
+
+		// Main body (hexagonal prism)
+		const bodyGeometry = new THREE.CylinderGeometry(1, 1.2, 2, 6);
+		const bodyMaterial = new THREE.MeshPhongMaterial({
+			color: 0x00ff88,
+			emissive: 0x00ff88,
+			emissiveIntensity: 0.3,
+			shininess: 100,
+			specular: 0x00ffff
+		});
+		const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+		characterGroup.add(body);
+
+		// Head (octahedron)
+		const headGeometry = new THREE.OctahedronGeometry(0.8);
+		const headMaterial = new THREE.MeshPhongMaterial({
+			color: 0x00ffff,
+			emissive: 0x00ffff,
+			emissiveIntensity: 0.4,
+			shininess: 100
+		});
+		const head = new THREE.Mesh(headGeometry, headMaterial);
+		head.position.y = 1.8;
+		characterGroup.add(head);
+
+		// Eyes (small spheres)
+		const eyeGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+		const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0xff6b35 });
+		const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+		leftEye.position.set(-0.25, 1.9, 0.6);
+		const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+		rightEye.position.set(0.25, 1.9, 0.6);
+		characterGroup.add(leftEye, rightEye);
+
+		// Arms (thin boxes)
+		const armGeometry = new THREE.BoxGeometry(0.2, 1.2, 0.2);
+		const armMaterial = new THREE.MeshPhongMaterial({
+			color: 0xa855f7,
+			emissive: 0xa855f7,
+			emissiveIntensity: 0.2
+		});
+		const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+		leftArm.position.set(-1.3, 0.3, 0);
+		leftArm.rotation.z = 0.3;
+		const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+		rightArm.position.set(1.3, 0.3, 0);
+		rightArm.rotation.z = -0.3;
+		characterGroup.add(leftArm, rightArm);
+
+		// Add wireframe overlay
+		const wireframeGeometry = new THREE.OctahedronGeometry(2.5, 0);
+		const wireframeMaterial = new THREE.MeshBasicMaterial({
+			color: 0x00ff88,
+			wireframe: true,
+			transparent: true,
+			opacity: 0.2
+		});
+		const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+		characterGroup.add(wireframe);
+
+		charScene.add(characterGroup);
+
+		// Mouse interaction
+		let isDragging = false;
+		let previousMousePosition = { x: 0, y: 0 };
+		let targetRotation = { x: 0.2, y: 0 };
+		let currentRotation = { x: 0.2, y: 0 };
+
+		charCanvas.addEventListener('mousedown', (e) => {
+			isDragging = true;
+			previousMousePosition = { x: e.clientX, y: e.clientY };
+		});
+
+		charCanvas.addEventListener('mousemove', (e) => {
+			if (isDragging) {
+				const deltaX = e.clientX - previousMousePosition.x;
+				const deltaY = e.clientY - previousMousePosition.y;
+				targetRotation.y += deltaX * 0.01;
+				targetRotation.x += deltaY * 0.01;
+				previousMousePosition = { x: e.clientX, y: e.clientY };
+			}
+		});
+
+		charCanvas.addEventListener('mouseup', () => {
+			isDragging = false;
+		});
+
+		charCanvas.addEventListener('mouseleave', () => {
+			isDragging = false;
+		});
+
+		// Touch support
+		charCanvas.addEventListener('touchstart', (e) => {
+			isDragging = true;
+			previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+		});
+
+		charCanvas.addEventListener('touchmove', (e) => {
+			if (isDragging) {
+				const deltaX = e.touches[0].clientX - previousMousePosition.x;
+				const deltaY = e.touches[0].clientY - previousMousePosition.y;
+				targetRotation.y += deltaX * 0.01;
+				targetRotation.x += deltaY * 0.01;
+				previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+			}
+		});
+
+		charCanvas.addEventListener('touchend', () => {
+			isDragging = false;
+		});
+
+		// Animate character
+		function animateCharacter() {
+			requestAnimationFrame(animateCharacter);
+
+			// Smooth rotation interpolation
+			currentRotation.x += (targetRotation.x - currentRotation.x) * 0.1;
+			currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
+
+			characterGroup.rotation.x = currentRotation.x;
+			characterGroup.rotation.y = currentRotation.y;
+
+			// Idle animations
+			if (!isDragging) {
+				targetRotation.y += 0.003;
+				head.rotation.y = Math.sin(Date.now() * 0.001) * 0.2;
+				leftArm.rotation.z = 0.3 + Math.sin(Date.now() * 0.002) * 0.1;
+				rightArm.rotation.z = -0.3 - Math.sin(Date.now() * 0.002) * 0.1;
+			}
+
+			// Rotate wireframe
+			wireframe.rotation.x += 0.002;
+			wireframe.rotation.y += 0.003;
+
+			// Pulse lights
+			pointLight1.intensity = 1.5 + Math.sin(Date.now() * 0.001) * 0.3;
+			pointLight2.intensity = 1 + Math.cos(Date.now() * 0.0012) * 0.2;
+
+			charRenderer.render(charScene, charCamera);
+		}
+		animateCharacter();
+
+		// ========================================
+		// PAGE INTERACTIONS
+		// ========================================
+
 		// Hide loading screen
 		window.addEventListener('load', () => {
 			setTimeout(() => {
 				document.getElementById('loading').classList.add('hidden');
-			}, 800);
+			}, 1200);
 		});
 
 		// Animate bars on load
@@ -1064,30 +1344,35 @@
 						bar.style.width = width;
 					}, 100);
 				});
-			}, 1000);
+			}, 1500);
 		});
 
 		// Achievement badge click animation
 		document.querySelectorAll('.achievement-badge').forEach(badge => {
 			badge.addEventListener('click', function() {
-				this.style.transform = 'scale(0.9) translateY(-8px)';
+				this.style.transform = 'scale(0.85) translateY(-10px)';
 				setTimeout(() => {
-					this.style.transform = 'scale(1.05) translateY(-8px)';
+					this.style.transform = 'scale(1.15) translateY(-10px)';
 					setTimeout(() => {
-						this.style.transform = 'translateY(-8px)';
-					}, 100);
-				}, 100);
+						this.style.transform = 'scale(1.08) translateY(-10px)';
+					}, 150);
+				}, 150);
 			});
 		});
 
-		// Parallax effect for character
-		document.addEventListener('mousemove', (e) => {
-			const character = document.querySelector('.character-emoji');
-			if (character) {
-				const x = (e.clientX / window.innerWidth - 0.5) * 20;
-				const y = (e.clientY / window.innerHeight - 0.5) * 20;
-				character.style.transform = `translateX(${x}px) translateY(${y}px)`;
-			}
+		// Resize handler
+		window.addEventListener('resize', () => {
+			// Background
+			bgCamera.aspect = window.innerWidth / window.innerHeight;
+			bgCamera.updateProjectionMatrix();
+			bgRenderer.setSize(window.innerWidth, window.innerHeight);
+
+			// Character
+			const containerWidth = charCanvas.parentElement.offsetWidth;
+			const containerHeight = charCanvas.parentElement.offsetHeight;
+			charCamera.aspect = containerWidth / containerHeight;
+			charCamera.updateProjectionMatrix();
+			charRenderer.setSize(containerWidth, containerHeight);
 		});
 	</script>
 </body>
