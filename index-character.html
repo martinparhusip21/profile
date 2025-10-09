@@ -14,6 +14,7 @@
 	<!-- Three.js -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 	<style>
 		* {
@@ -516,9 +517,57 @@
 				padding: 5px;
 			}
 		}
+
+		/* Loading Screen */
+		.loading-screen {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: #0a0e1a;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			z-index: 9999;
+			transition: opacity 0.5s ease;
+		}
+
+		.loading-screen.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.loading-spinner {
+			width: 60px;
+			height: 60px;
+			border: 4px solid rgba(0, 255, 136, 0.1);
+			border-top-color: var(--primary-green);
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+
+		.loading-text {
+			margin-top: 20px;
+			font-family: 'Orbitron', sans-serif;
+			font-size: 16px;
+			color: var(--primary-green);
+			letter-spacing: 2px;
+		}
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
+		}
 	</style>
 </head>
 <body>
+	<!-- Loading Screen -->
+	<div class="loading-screen" id="loadingScreen">
+		<div class="loading-spinner"></div>
+		<div class="loading-text">LOADING CHARACTER...</div>
+	</div>
+
 	<!-- 3D Background -->
 	<canvas id="background-canvas"></canvas>
 	<div class="grid-overlay"></div>
@@ -775,102 +824,97 @@
 		directionalLight.castShadow = true;
 		charScene.add(directionalLight);
 
-		// Create stylized humanoid character
-		const character = new THREE.Group();
+		// Character variables
+		let character = null;
+		let mixer = null;
+		let clock = new THREE.Clock();
+		let animations = [];
+		let head = null;
+		let leftArm = null;
+		let rightArm = null;
+		let wireframe = null;
+		let model = null;
 
-		// Body
-		const bodyGeometry = new THREE.CylinderGeometry(0.8, 1, 2.5, 8);
-		const bodyMaterial = new THREE.MeshPhongMaterial({
-			color: 0x00ff88,
-			emissive: 0x00ff88,
-			emissiveIntensity: 0.3,
-			shininess: 100,
-			flatShading: true
-		});
-		const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-		body.position.y = 0;
-		character.add(body);
+		charCamera.position.set(0, 1, 5);
+		charCamera.lookAt(0, 1, 0);
 
-		// Head
-		const headGeometry = new THREE.SphereGeometry(0.8, 12, 12);
-		const headMaterial = new THREE.MeshPhongMaterial({
-			color: 0x00ffff,
-			emissive: 0x00ffff,
-			emissiveIntensity: 0.4,
-			shininess: 100,
-			flatShading: true
-		});
-		const head = new THREE.Mesh(headGeometry, headMaterial);
-		head.position.y = 2.3;
-		character.add(head);
+		// Load 3D Character Model
+		const loader = new THREE.GLTFLoader();
+		const loadingScreen = document.getElementById('loadingScreen');
 
-		// Eyes
-		const eyeGeometry = new THREE.SphereGeometry(0.15, 8, 8);
-		const eyeMaterial = new THREE.MeshPhongMaterial({
-			color: 0xff6b35,
-			emissive: 0xff6b35,
-			emissiveIntensity: 0.8
-		});
-		const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-		leftEye.position.set(-0.25, 2.5, 0.65);
-		character.add(leftEye);
+		// Using RobotExpressive from Three.js examples (free CDN model)
+		const modelURL = 'https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb';
 
-		const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-		rightEye.position.set(0.25, 2.5, 0.65);
-		character.add(rightEye);
+		loader.load(
+			modelURL,
+			function (gltf) {
+				model = gltf.scene;
+				character = model;
 
-		// Arms
-		const armGeometry = new THREE.CapsuleGeometry(0.25, 1.5, 8, 16);
-		const armMaterial = new THREE.MeshPhongMaterial({
-			color: 0xa855f7,
-			emissive: 0xa855f7,
-			emissiveIntensity: 0.3,
-			shininess: 100,
-			flatShading: true
-		});
+				// Scale and position the model
+				model.scale.set(1.5, 1.5, 1.5);
+				model.position.y = -1;
 
-		const leftArm = new THREE.Mesh(armGeometry, armMaterial);
-		leftArm.position.set(-1.2, 0.5, 0);
-		leftArm.rotation.z = 0.3;
-		character.add(leftArm);
+				// Apply custom colors to materials
+				model.traverse((child) => {
+					if (child.isMesh) {
+						child.castShadow = true;
+						child.receiveShadow = true;
 
-		const rightArm = new THREE.Mesh(armGeometry, armMaterial);
-		rightArm.position.set(1.2, 0.5, 0);
-		rightArm.rotation.z = -0.3;
-		character.add(rightArm);
+						// Add emissive glow effect
+						if (child.material) {
+							child.material.emissive = new THREE.Color(0x00ff88);
+							child.material.emissiveIntensity = 0.2;
+						}
+					}
+				});
 
-		// Legs
-		const legGeometry = new THREE.CapsuleGeometry(0.3, 1.8, 8, 16);
-		const legMaterial = new THREE.MeshPhongMaterial({
-			color: 0x00ff88,
-			emissive: 0x00ff88,
-			emissiveIntensity: 0.2,
-			shininess: 100,
-			flatShading: true
-		});
+				charScene.add(model);
 
-		const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
-		leftLeg.position.set(-0.4, -2.2, 0);
-		character.add(leftLeg);
+				// Setup animations
+				if (gltf.animations && gltf.animations.length > 0) {
+					mixer = new THREE.AnimationMixer(model);
+					animations = gltf.animations;
 
-		const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
-		rightLeg.position.set(0.4, -2.2, 0);
-		character.add(rightLeg);
+					// Play idle animation by default
+					const idleAnimation = animations.find(anim => anim.name.toLowerCase().includes('idle'));
+					if (idleAnimation) {
+						const action = mixer.clipAction(idleAnimation);
+						action.play();
+					} else {
+						// Play first animation if no idle found
+						const action = mixer.clipAction(animations[0]);
+						action.play();
+					}
+				}
 
-		// Wireframe overlay
-		const wireframeGeometry = new THREE.IcosahedronGeometry(3, 0);
-		const wireframeMaterial = new THREE.MeshBasicMaterial({
-			color: 0x00ff88,
-			wireframe: true,
-			transparent: true,
-			opacity: 0.15
-		});
-		const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
-		character.add(wireframe);
+				// Add wireframe overlay
+				const wireframeGeometry = new THREE.IcosahedronGeometry(3, 1);
+				const wireframeMaterial = new THREE.MeshBasicMaterial({
+					color: 0x00ff88,
+					wireframe: true,
+					transparent: true,
+					opacity: 0.1
+				});
+				wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+				wireframe.position.y = 0.5;
+				charScene.add(wireframe);
 
-		charScene.add(character);
-		charCamera.position.set(0, 0, 12);
-		charCamera.lookAt(0, 0, 0);
+				// Hide loading screen
+				setTimeout(() => {
+					loadingScreen.classList.add('hidden');
+				}, 500);
+			},
+			function (xhr) {
+				const percentComplete = (xhr.loaded / xhr.total) * 100;
+				console.log('Loading: ' + Math.round(percentComplete) + '%');
+			},
+			function (error) {
+				console.error('Error loading model:', error);
+				// Hide loading screen even on error
+				loadingScreen.classList.add('hidden');
+			}
+		);
 
 		// Mouse interaction
 		let isDragging = false;
@@ -928,107 +972,68 @@
 			isDragging = false;
 		});
 
-		// Click animation
+		// Click animation - play random animation from loaded model
 		charCanvas.addEventListener('click', () => {
-			if (!isAnimating) {
+			if (!isAnimating && mixer && animations.length > 0) {
 				isAnimating = true;
-				const animations = [
-					() => {
-						// Jump
-						const startY = character.position.y;
-						const jumpHeight = 1.5;
-						const duration = 1000;
-						const startTime = Date.now();
 
-						function jump() {
-							const elapsed = Date.now() - startTime;
-							const progress = elapsed / duration;
+				// Stop current animations
+				mixer.stopAllAction();
 
-							if (progress < 1) {
-								const easeProgress = progress < 0.5
-									? 2 * progress * progress
-									: 1 - Math.pow(-2 * progress + 2, 2) / 2;
-								character.position.y = startY + Math.sin(easeProgress * Math.PI) * jumpHeight;
-								requestAnimationFrame(jump);
-							} else {
-								character.position.y = startY;
-								isAnimating = false;
-							}
-						}
-						jump();
-					},
-					() => {
-						// Spin
-						const spinRotations = 2;
-						const duration = 1500;
-						const startTime = Date.now();
-						const startRotation = targetRotation.y;
+				// Play random animation
+				const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+				const action = mixer.clipAction(randomAnim);
+				action.setLoop(THREE.LoopOnce);
+				action.clampWhenFinished = true;
+				action.reset();
+				action.play();
 
-						function spin() {
-							const elapsed = Date.now() - startTime;
-							const progress = elapsed / duration;
-
-							if (progress < 1) {
-								targetRotation.y = startRotation + (spinRotations * Math.PI * 2 * progress);
-								requestAnimationFrame(spin);
-							} else {
-								isAnimating = false;
-							}
-						}
-						spin();
-					},
-					() => {
-						// Wave arms
-						const duration = 1000;
-						const startTime = Date.now();
-
-						function wave() {
-							const elapsed = Date.now() - startTime;
-							const progress = elapsed / duration;
-
-							if (progress < 1) {
-								leftArm.rotation.z = 0.3 + Math.sin(progress * Math.PI * 4) * 0.5;
-								rightArm.rotation.z = -0.3 - Math.sin(progress * Math.PI * 4) * 0.5;
-								requestAnimationFrame(wave);
-							} else {
-								leftArm.rotation.z = 0.3;
-								rightArm.rotation.z = -0.3;
-								isAnimating = false;
-							}
-						}
-						wave();
+				// Reset to idle after animation finishes
+				setTimeout(() => {
+					const idleAnimation = animations.find(anim => anim.name.toLowerCase().includes('idle'));
+					if (idleAnimation) {
+						mixer.stopAllAction();
+						const idleAction = mixer.clipAction(idleAnimation);
+						idleAction.reset();
+						idleAction.play();
 					}
-				];
-
-				const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
-				randomAnimation();
+					isAnimating = false;
+				}, randomAnim.duration * 1000);
 			}
 		});
 
 		function animateCharacter() {
 			requestAnimationFrame(animateCharacter);
 
+			const delta = clock.getDelta();
+
+			// Update animation mixer
+			if (mixer) {
+				mixer.update(delta);
+			}
+
 			// Smooth rotation
 			currentRotation.x += (targetRotation.x - currentRotation.x) * 0.1;
 			currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
 
-			character.rotation.x = currentRotation.x;
-			character.rotation.y = currentRotation.y;
+			if (character) {
+				character.rotation.x = currentRotation.x;
+				character.rotation.y = currentRotation.y;
 
-			// Idle animations
-			if (!isDragging && !isAnimating) {
-				targetRotation.y += 0.002;
-				head.rotation.y = Math.sin(Date.now() * 0.001) * 0.3;
-				head.rotation.x = Math.sin(Date.now() * 0.0008) * 0.1;
-
-				leftArm.rotation.z = 0.3 + Math.sin(Date.now() * 0.001) * 0.1;
-				rightArm.rotation.z = -0.3 - Math.sin(Date.now() * 0.001) * 0.1;
+				// Auto-rotate when not dragging
+				if (!isDragging && !isAnimating) {
+					targetRotation.y += 0.002;
+				}
 			}
 
 			// Pulsing lights
 			directionalLight.intensity = 1.2 + Math.sin(Date.now() * 0.001) * 0.2;
-			wireframe.rotation.y += 0.005;
-			wireframe.rotation.x += 0.003;
+
+			// Animate wireframe overlay
+			if (wireframe) {
+				wireframe.rotation.y += 0.005;
+				wireframe.rotation.x += 0.003;
+			}
 
 			charRenderer.render(charScene, charCamera);
 		}
