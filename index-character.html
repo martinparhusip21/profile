@@ -487,34 +487,110 @@
 		@media (max-width: 968px) {
 			.dashboard {
 				grid-template-columns: 1fr;
-				grid-template-rows: auto 1fr auto;
+				grid-template-rows: auto 60vh auto;
 				padding: 10px;
+				gap: 10px;
 			}
 
 			.sidebar, .progress-panel {
-				max-height: 40vh;
+				max-height: none;
+				height: auto;
+				padding: 20px 15px;
 			}
 
 			.character-container {
-				height: 50vh;
+				order: -1;
 			}
 
 			.character-name {
-				font-size: 32px;
+				font-size: 28px;
+				margin-bottom: 15px;
+			}
+
+			.xp-section {
+				margin-bottom: 15px;
+			}
+
+			.trophy-section {
+				margin-bottom: 20px;
+			}
+
+			.stat-item {
+				margin-bottom: 15px;
+			}
+
+			.skill-progress {
+				margin-bottom: 18px;
+			}
+
+			.resources {
+				margin-bottom: 20px;
+			}
+
+			.canvas-hint {
+				bottom: 15px;
+				font-size: 11px;
+				padding: 8px 15px;
 			}
 		}
 
 		@media (max-width: 480px) {
+			.dashboard {
+				grid-template-rows: auto 50vh auto;
+				padding: 5px;
+				gap: 8px;
+			}
+
 			.character-name {
-				font-size: 24px;
+				font-size: 22px;
+				letter-spacing: 2px;
 			}
 
 			.xp-value, .trophy-value {
 				font-size: 20px;
 			}
 
-			.dashboard {
-				padding: 5px;
+			.xp-badge, .trophy-icon {
+				width: 50px;
+				height: 50px;
+				font-size: 24px;
+			}
+
+			.sidebar, .progress-panel {
+				padding: 15px 10px;
+			}
+
+			.stat-icon {
+				width: 32px;
+				height: 32px;
+				font-size: 16px;
+			}
+
+			.stat-name, .skill-name {
+				font-size: 12px;
+			}
+
+			.progress-title {
+				font-size: 20px;
+				margin-bottom: 20px;
+			}
+
+			.resource-box {
+				padding: 10px;
+			}
+
+			.resource-value {
+				font-size: 18px;
+			}
+
+			.rank-percentage {
+				font-size: 30px;
+			}
+
+			.canvas-hint {
+				bottom: 10px;
+				font-size: 10px;
+				padding: 6px 12px;
 			}
 		}
 
@@ -835,8 +911,15 @@
 		let wireframe = null;
 		let model = null;
 
-		charCamera.position.set(0, 1, 5);
-		charCamera.lookAt(0, 1, 0);
+		// Initial camera position based on screen size
+		const initialIsMobile = window.innerWidth <= 968;
+		if (initialIsMobile) {
+			charCamera.position.set(0, 0.3, 3.5);
+			charCamera.lookAt(0, 0.3, 0);
+		} else {
+			charCamera.position.set(0, 0.5, 4);
+			charCamera.lookAt(0, 0.5, 0);
+		}
 
 		// Load 3D Character Model
 		const loader = new THREE.GLTFLoader();
@@ -851,9 +934,11 @@
 				model = gltf.scene;
 				character = model;
 
-				// Scale and position the model
-				model.scale.set(1.5, 1.5, 1.5);
-				model.position.y = -1;
+				// Scale and position the model based on screen size
+				const isMobile = window.innerWidth <= 968;
+				const scale = isMobile ? 0.6 : 0.8;
+				model.scale.set(scale, scale, scale);
+				model.position.y = isMobile ? -0.6 : -0.8;
 
 				// Apply custom colors to materials
 				model.traverse((child) => {
@@ -1101,6 +1186,23 @@
 			bgRenderer.setSize(window.innerWidth, window.innerHeight);
 
 			resizeCharacterCanvas();
+
+			// Adjust model scale and camera for mobile
+			if (model) {
+				const isMobile = window.innerWidth <= 968;
+				const scale = isMobile ? 0.6 : 0.8;
+				model.scale.set(scale, scale, scale);
+				model.position.y = isMobile ? -0.6 : -0.8;
+
+				// Adjust camera position for mobile
+				if (isMobile) {
+					charCamera.position.set(0, 0.3, 3.5);
+					charCamera.lookAt(0, 0.3, 0);
+				} else {
+					charCamera.position.set(0, 0.5, 4);
+					charCamera.lookAt(0, 0.5, 0);
+				}
+			}
 		});
 	</script>
 </body>
