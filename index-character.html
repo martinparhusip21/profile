@@ -511,8 +511,8 @@
 			to { transform: rotate(360deg); }
 		}
 
-		/* Hide desktop extra content on mobile */
-		.desktop-extra-content {
+		/* Side Navigation for Desktop */
+		.side-nav {
 			display: none;
 		}
 
@@ -532,6 +532,7 @@
 				border: none;
 				box-shadow: none;
 				background: transparent;
+				display: flex;
 			}
 
 			.phone-notch {
@@ -566,22 +567,27 @@
 				border-radius: 3px;
 			}
 
-			/* Left Column - Skills */
+			/* Left Column - Skills (Always visible) */
 			#skills-section {
 				display: block !important;
 				width: 350px;
 				border-right: 1px solid rgba(0, 255, 136, 0.1);
+				order: 1;
 			}
 
-			/* Center Column - Home + Experience + Projects */
-			#home-section {
-				display: block !important;
+			/* Center Column - Switchable (Home / Experience / Projects) */
+			#home-section, #experience-section, #projects-section {
 				flex: 1;
 				border-right: 1px solid rgba(0, 255, 136, 0.1);
+				order: 2;
+			}
+
+			#home-section {
+				display: block !important;
 			}
 
 			#experience-section, #projects-section {
-				display: none !important;
+				display: none;
 			}
 
 			.character-section {
@@ -596,10 +602,11 @@
 				height: 400px;
 			}
 
-			/* Right Column - Progress */
+			/* Right Column - Progress (Always visible) */
 			#progress-section {
 				display: block !important;
 				width: 380px;
+				order: 3;
 			}
 
 			.bottom-nav {
@@ -614,8 +621,45 @@
 				border-radius: 0;
 			}
 
-			.desktop-extra-content {
-				display: block;
+			/* Side Navigation for Desktop */
+			.side-nav {
+				display: flex;
+				flex-direction: column;
+				width: 80px;
+				background: rgba(10, 14, 26, 0.95);
+				border-right: 1px solid rgba(0, 255, 136, 0.1);
+				padding: 20px 0;
+				gap: 15px;
+				align-items: center;
+			}
+
+			.side-nav-item {
+				width: 50px;
+				height: 50px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(0, 255, 136, 0.1);
+				border-radius: 12px;
+				font-size: 24px;
+				cursor: pointer;
+				transition: all 0.3s;
+				opacity: 0.5;
+			}
+
+			.side-nav-item:hover {
+				opacity: 0.8;
+				transform: scale(1.05);
+			}
+
+			.side-nav-item.active {
+				opacity: 1;
+				background: var(--primary-green);
+				box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+			}
+
+			.content-area {
+				width: calc(100% - 80px);
 			}
 		}
 	</style>
@@ -626,6 +670,16 @@
 		<div class="loading-screen" id="loadingScreen">
 			<div class="loading-spinner"></div>
 			<div class="loading-text">LOADING...</div>
+		</div>
+
+		<!-- Side Navigation (Desktop Only) -->
+		<div class="side-nav">
+			<div class="side-nav-item active" data-section="home-section" title="Home">🏠</div>
+			<div class="side-nav-item" data-section="skills-section" title="Skills">⚡</div>
+			<div class="side-nav-item" data-section="progress-section" title="Progress">🏆</div>
+			<div class="side-nav-item" data-section="experience-section" title="Experience">💼</div>
+			<div class="side-nav-item" data-section="projects-section" title="Projects">📱</div>
+			<div class="side-nav-item" style="margin-top: auto;" title="Settings">⚙️</div>
 		</div>
 
 		<!-- Notch -->
@@ -667,74 +721,6 @@
 							<div class="stat-icon">✅</div>
 							<div class="stat-value" style="color: var(--primary-purple);">500+</div>
 							<div class="stat-label">Daily Tests</div>
-						</div>
-					</div>
-
-					<!-- Experience & Projects for Desktop -->
-					<div class="desktop-extra-content">
-						<h2 class="section-title" style="margin-top: 40px;">EXPERIENCE</h2>
-
-						<div class="experience-item">
-							<div class="experience-dot"></div>
-							<div class="experience-company">Fintech Banking Company</div>
-							<div class="experience-role">AI Automation Engineer</div>
-							<div class="experience-period">2023 - Present • 1.5 Years</div>
-							<div class="experience-desc">
-								Built enterprise-grade synthetic monitoring system protecting 2M+ daily active users.
-								Execute 500+ automated health checks daily across 15+ critical banking journeys with
-								30+ minute advance warning before incidents impact customers.
-							</div>
-						</div>
-
-						<div class="experience-item">
-							<div class="experience-dot"></div>
-							<div class="experience-company">University Research</div>
-							<div class="experience-role">Machine Learning Researcher</div>
-							<div class="experience-period">2022 - 2023 • 1 Year</div>
-							<div class="experience-desc">
-								Published sentiment analysis research achieving 81.54% accuracy using SVM.
-								Analyzed 10,000+ data points and published in SINTA 2 indexed journal.
-							</div>
-						</div>
-
-						<h2 class="section-title" style="margin-top: 40px;">FEATURED PROJECTS</h2>
-
-						<div class="project-card">
-							<div class="project-header">
-								<div class="project-icon">🏦</div>
-								<div>
-									<div class="project-title">Banking Automation Monitor</div>
-								</div>
-							</div>
-							<div class="project-desc">
-								Enterprise-grade synthetic monitoring system executing 500+ daily health checks
-								across 15+ critical banking journeys, protecting 2M+ users with 30-min advance warning.
-							</div>
-							<div class="project-tags">
-								<span class="project-tag">Appium</span>
-								<span class="project-tag">Python</span>
-								<span class="project-tag">MySQL</span>
-								<span class="project-tag">AWS</span>
-							</div>
-						</div>
-
-						<div class="project-card">
-							<div class="project-header">
-								<div class="project-icon">🔄</div>
-								<div>
-									<div class="project-title">N8N AI Workflows</div>
-								</div>
-							</div>
-							<div class="project-desc">
-								Production-ready intelligent automation workflows for DevOps operations.
-								Saved ~10 hours weekly through automated incident routing and escalation.
-							</div>
-							<div class="project-tags">
-								<span class="project-tag">n8n</span>
-								<span class="project-tag">Webhooks</span>
-								<span class="project-tag">MySQL</span>
-								<span class="project-tag">Docker</span>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -975,8 +961,34 @@
 	<script>
 		// Navigation
 		const navItems = document.querySelectorAll('.nav-item');
+		const sideNavItems = document.querySelectorAll('.side-nav-item[data-section]');
 		const sections = document.querySelectorAll('.section');
+		const isDesktop = () => window.innerWidth >= 969;
 
+		function switchSection(targetSection) {
+			if (isDesktop()) {
+				// Desktop: Show all 3 columns, but highlight active center section
+				sections.forEach(section => {
+					const sectionId = section.id;
+					if (sectionId === 'skills-section' || sectionId === 'progress-section') {
+						// Always show skills and progress on desktop
+						section.style.display = 'block';
+					} else if (sectionId === targetSection) {
+						// Show selected center section
+						section.style.display = 'block';
+					} else {
+						// Hide other center sections
+						section.style.display = 'none';
+					}
+				});
+			} else {
+				// Mobile: Show only active section
+				sections.forEach(section => section.classList.remove('active'));
+				document.getElementById(targetSection).classList.add('active');
+			}
+		}
+
+		// Bottom navigation (mobile)
 		navItems.forEach(item => {
 			item.addEventListener('click', () => {
 				const targetSection = item.getAttribute('data-section');
@@ -985,9 +997,30 @@
 				navItems.forEach(nav => nav.classList.remove('active'));
 				item.classList.add('active');
 
-				// Update active section
-				sections.forEach(section => section.classList.remove('active'));
-				document.getElementById(targetSection).classList.add('active');
+				// Update active side nav
+				sideNavItems.forEach(nav => nav.classList.remove('active'));
+				const correspondingSideNav = document.querySelector(`.side-nav-item[data-section="${targetSection}"]`);
+				if (correspondingSideNav) correspondingSideNav.classList.add('active');
+
+				switchSection(targetSection);
+			});
+		});
+
+		// Side navigation (desktop)
+		sideNavItems.forEach(item => {
+			item.addEventListener('click', () => {
+				const targetSection = item.getAttribute('data-section');
+
+				// Update active side nav
+				sideNavItems.forEach(nav => nav.classList.remove('active'));
+				item.classList.add('active');
+
+				// Update active bottom nav
+				navItems.forEach(nav => nav.classList.remove('active'));
+				const correspondingBottomNav = document.querySelector(`.nav-item[data-section="${targetSection}"]`);
+				if (correspondingBottomNav) correspondingBottomNav.classList.add('active');
+
+				switchSection(targetSection);
 			});
 		});
 
