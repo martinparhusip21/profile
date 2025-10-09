@@ -3,24 +3,22 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Martin Parhusip - Game Character Dashboard</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Martin Parhusip - AI Automation Engineer | Interactive 3D Portfolio" />
-	<meta name="keywords" content="AI Automation Engineer, Python Expert, 3D Portfolio, Three.js" />
-	<meta name="author" content="Martin Parhusip" />
+	<title>Martin Parhusip - Mobile Portfolio</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="Martin Parhusip - AI Automation Engineer | Interactive Mobile Portfolio" />
 
-	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhana:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 	<!-- Three.js -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 	<style>
 		* {
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
+			-webkit-tap-highlight-color: transparent;
 		}
 
 		:root {
@@ -29,179 +27,204 @@
 			--primary-orange: #ff6b35;
 			--primary-purple: #a855f7;
 			--bg-dark: #0a0e1a;
-			--bg-card: rgba(21, 27, 45, 0.9);
+			--bg-card: #1a1f2e;
+			--bg-glass: rgba(26, 31, 46, 0.95);
 			--text-primary: #ffffff;
 			--text-secondary: #94a3b8;
 		}
 
 		body {
 			font-family: 'Rajdhani', sans-serif;
-			background: #0a0e1a;
+			background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
 			color: var(--text-primary);
 			overflow-x: hidden;
 			min-height: 100vh;
-		}
-
-		/* 3D Background */
-		#background-canvas {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 0;
-		}
-
-		.grid-overlay {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background-image:
-				linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px),
-				linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px);
-			background-size: 50px 50px;
-			pointer-events: none;
-			z-index: 1;
-		}
-
-		/* Main Layout Container */
-		.dashboard {
-			position: relative;
-			width: 100%;
-			min-height: 100vh;
-			display: grid;
-			grid-template-columns: 350px 1fr 380px;
-			gap: 0;
-			z-index: 2;
-			padding: 20px;
-		}
-
-		/* Sidebar Styling */
-		.sidebar {
-			background: rgba(10, 14, 26, 0.75);
-			backdrop-filter: blur(20px);
-			border-right: 1px solid rgba(0, 255, 136, 0.1);
-			padding: 30px 20px;
-			overflow-y: auto;
-		}
-
-		.sidebar::-webkit-scrollbar {
-			width: 6px;
-		}
-
-		.sidebar::-webkit-scrollbar-thumb {
-			background: var(--primary-green);
-			border-radius: 3px;
-		}
-
-		/* Character Name */
-		.character-name {
-			font-family: 'Orbitron', sans-serif;
-			font-size: 42px;
-			font-weight: 900;
-			color: var(--primary-green);
-			text-transform: uppercase;
-			letter-spacing: 4px;
-			margin-bottom: 20px;
-			text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
-		}
-
-		/* XP Section */
-		.xp-section {
-			display: flex;
-			align-items: center;
-			gap: 15px;
-			margin-bottom: 25px;
-		}
-
-		.xp-badge {
-			width: 60px;
-			height: 60px;
-			background: linear-gradient(135deg, var(--primary-green), var(--primary-cyan));
-			border-radius: 12px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 28px;
-			box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+			padding: 20px;
 		}
 
-		.xp-info {
-			flex: 1;
+		/* Mobile Phone Container */
+		.phone-container {
+			width: 100%;
+			max-width: 420px;
+			height: 90vh;
+			max-height: 900px;
+			background: var(--bg-card);
+			border-radius: 40px;
+			overflow: hidden;
+			position: relative;
+			box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+			border: 8px solid #1a1f2e;
 		}
 
-		.xp-label {
-			font-size: 11px;
+		/* Top Notch */
+		.phone-notch {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 150px;
+			height: 30px;
+			background: #0a0e1a;
+			border-radius: 0 0 20px 20px;
+			z-index: 100;
+		}
+
+		/* Header */
+		.header {
+			position: relative;
+			padding: 45px 20px 15px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: var(--bg-glass);
+			border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+		}
+
+		.menu-icon, .settings-icon {
+			width: 40px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(0, 255, 136, 0.1);
+			border-radius: 10px;
+			font-size: 20px;
+			cursor: pointer;
+		}
+
+		.header-badge {
+			width: 50px;
+			height: 50px;
+			background: linear-gradient(135deg, var(--primary-green), var(--primary-cyan));
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 24px;
+			box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+		}
+
+		/* Content Area */
+		.content-area {
+			height: calc(100% - 160px);
+			overflow-x: hidden;
+			overflow-y: auto;
+			position: relative;
+		}
+
+		.content-area::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		.content-area::-webkit-scrollbar-thumb {
+			background: var(--primary-green);
+			border-radius: 2px;
+		}
+
+		/* Section */
+		.section {
+			padding: 20px;
+			display: none;
+		}
+
+		.section.active {
+			display: block;
+		}
+
+		/* Character Section */
+		.character-section {
+			text-align: center;
+			padding: 30px 20px;
+		}
+
+		.character-name {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 48px;
+			font-weight: 900;
+			color: var(--primary-green);
+			text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+			margin-bottom: 20px;
+		}
+
+		.character-title {
+			font-size: 14px;
 			color: var(--text-secondary);
 			text-transform: uppercase;
-			letter-spacing: 1px;
+			letter-spacing: 2px;
+			margin-bottom: 30px;
 		}
 
-		.xp-value {
-			font-family: 'Orbitron', sans-serif;
+		#character-canvas {
+			width: 100%;
+			height: 300px;
+			cursor: grab;
+			margin-bottom: 20px;
+		}
+
+		#character-canvas:active {
+			cursor: grabbing;
+		}
+
+		.stats-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 15px;
+			margin-bottom: 30px;
+		}
+
+		.stat-card {
+			background: rgba(0, 255, 136, 0.1);
+			border: 1px solid rgba(0, 255, 136, 0.3);
+			border-radius: 15px;
+			padding: 15px;
+			text-align: center;
+		}
+
+		.stat-icon {
 			font-size: 28px;
+			margin-bottom: 8px;
+		}
+
+		.stat-value {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 24px;
 			font-weight: 700;
 			color: var(--primary-green);
 		}
 
-		.xp-subtext {
-			font-size: 13px;
-			color: var(--text-secondary);
-		}
-
-		/* Trophy Section */
-		.trophy-section {
-			display: flex;
-			align-items: center;
-			gap: 15px;
-			padding: 15px;
-			background: rgba(255, 107, 53, 0.1);
-			border: 1px solid rgba(255, 107, 53, 0.3);
-			border-radius: 12px;
-			margin-bottom: 30px;
-		}
-
-		.trophy-icon {
-			font-size: 32px;
-		}
-
-		.trophy-info {
-			flex: 1;
-		}
-
-		.trophy-label {
+		.stat-label {
 			font-size: 11px;
-			color: var(--primary-orange);
+			color: var(--text-secondary);
 			text-transform: uppercase;
 			letter-spacing: 1px;
 		}
 
-		.trophy-value {
+		/* Skills Section */
+		.section-title {
 			font-family: 'Orbitron', sans-serif;
-			font-size: 32px;
+			font-size: 24px;
 			font-weight: 700;
-			color: var(--primary-orange);
+			color: var(--primary-green);
+			margin-bottom: 20px;
+			text-transform: uppercase;
+			letter-spacing: 2px;
 		}
 
-		/* Stats Section */
-		.stats-section {
-			margin-bottom: 10px;
-		}
-
-		.stat-item {
+		.skill-item {
 			margin-bottom: 20px;
 		}
 
-		.stat-header {
+		.skill-header {
 			display: flex;
 			align-items: center;
-			gap: 10px;
+			gap: 12px;
 			margin-bottom: 8px;
 		}
 
-		.stat-icon {
+		.skill-icon {
 			width: 36px;
 			height: 36px;
 			background: rgba(0, 255, 136, 0.15);
@@ -212,193 +235,24 @@
 			font-size: 18px;
 		}
 
-		.stat-icon.magic { background: rgba(168, 85, 247, 0.15); }
-		.stat-icon.shield { background: rgba(0, 255, 255, 0.15); }
-		.stat-icon.health { background: rgba(255, 107, 53, 0.15); }
+		.skill-info {
+			flex: 1;
+		}
 
-		.stat-name {
+		.skill-name {
 			font-size: 14px;
 			font-weight: 600;
 			text-transform: uppercase;
 			letter-spacing: 1px;
 		}
 
-		.stat-bar {
-			width: 100%;
-			height: 8px;
-			background: rgba(255, 255, 255, 0.1);
-			border-radius: 4px;
-			overflow: hidden;
-			position: relative;
-		}
-
-		.stat-fill {
-			height: 100%;
-			background: linear-gradient(90deg, var(--primary-green), var(--primary-cyan));
-			border-radius: 4px;
-			position: relative;
-			transition: width 1s ease;
-		}
-
-		.stat-fill.magic { background: linear-gradient(90deg, #a855f7, #ec4899); }
-		.stat-fill.shield { background: linear-gradient(90deg, #00ffff, #00ff88); }
-		.stat-fill.health { background: linear-gradient(90deg, #ff6b35, #fbbf24); }
-
-		.stat-fill::after {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-			animation: shimmer 2s infinite;
-		}
-
-		@keyframes shimmer {
-			0% { transform: translateX(-100%); }
-			100% { transform: translateX(100%); }
-		}
-
-		/* Center Character Container */
-		.character-container {
-			position: relative;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05), transparent 70%);
-		}
-
-		#character-canvas {
-			width: 100%;
-			height: 100%;
-			cursor: grab;
-		}
-
-		#character-canvas:active {
-			cursor: grabbing;
-		}
-
-		.canvas-hint {
-			position: absolute;
-			bottom: 30px;
-			left: 50%;
-			transform: translateX(-50%);
-			background: rgba(0, 0, 0, 0.7);
-			backdrop-filter: blur(10px);
-			padding: 10px 20px;
-			border-radius: 20px;
-			font-size: 13px;
-			color: var(--text-secondary);
-			pointer-events: none;
-			opacity: 0.7;
-		}
-
-		/* Right Progress Panel */
-		.progress-panel {
-			background: rgba(10, 14, 26, 0.75);
-			backdrop-filter: blur(20px);
-			border-left: 1px solid rgba(0, 255, 136, 0.1);
-			padding: 30px 20px;
-			overflow-y: auto;
-		}
-
-		.progress-panel::-webkit-scrollbar {
-			width: 6px;
-		}
-
-		.progress-panel::-webkit-scrollbar-thumb {
-			background: var(--primary-green);
-			border-radius: 3px;
-		}
-
-		/* Resources */
-		.resources {
-			display: flex;
-			gap: 15px;
-			margin-bottom: 30px;
-		}
-
-		.resource-box {
-			flex: 1;
-			background: rgba(0, 255, 136, 0.1);
-			border: 1px solid rgba(0, 255, 136, 0.3);
-			border-radius: 12px;
-			padding: 12px;
-			text-align: center;
-		}
-
-		.resource-box.gold {
-			background: rgba(255, 193, 7, 0.1);
-			border-color: rgba(255, 193, 7, 0.3);
-		}
-
-		.resource-icon {
-			font-size: 24px;
-			margin-bottom: 5px;
-		}
-
-		.resource-value {
-			font-family: 'Orbitron', sans-serif;
-			font-size: 20px;
-			font-weight: 700;
-			color: var(--primary-green);
-		}
-
-		.resource-box.gold .resource-value {
-			color: #ffc107;
-		}
-
-		/* Progress Title */
-		.progress-title {
-			font-family: 'Orbitron', sans-serif;
-			font-size: 24px;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: 2px;
-			margin-bottom: 25px;
-			color: var(--primary-green);
-			text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-		}
-
-		/* Skill Progress Items */
-		.skill-progress {
-			margin-bottom: 22px;
-		}
-
-		.skill-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 8px;
-		}
-
-		.skill-name {
-			font-size: 13px;
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 1px;
-			color: var(--text-primary);
-		}
-
-		.skill-level {
-			font-family: 'Orbitron', sans-serif;
-			font-size: 12px;
-			font-weight: 700;
-			color: var(--primary-green);
-			background: rgba(0, 255, 136, 0.15);
-			padding: 3px 10px;
-			border-radius: 8px;
-		}
-
 		.skill-bar {
 			width: 100%;
 			height: 10px;
-			background: rgba(255, 255, 255, 0.08);
+			background: rgba(255, 255, 255, 0.1);
 			border-radius: 5px;
 			overflow: hidden;
 			position: relative;
-			border: 1px solid rgba(0, 255, 136, 0.2);
 		}
 
 		.skill-fill {
@@ -406,228 +260,223 @@
 			background: linear-gradient(90deg, var(--primary-green), var(--primary-cyan));
 			border-radius: 5px;
 			position: relative;
-			transition: width 1.2s ease;
 			box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 		}
 
-		.skill-fill::after {
+		/* Progress Section */
+		.progress-item {
+			background: rgba(0, 255, 136, 0.05);
+			border: 1px solid rgba(0, 255, 136, 0.2);
+			border-radius: 12px;
+			padding: 15px;
+			margin-bottom: 15px;
+		}
+
+		.progress-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+
+		.progress-name {
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		.progress-level {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 11px;
+			font-weight: 700;
+			color: var(--primary-green);
+			background: rgba(0, 255, 136, 0.15);
+			padding: 4px 10px;
+			border-radius: 8px;
+		}
+
+		/* Experience Section */
+		.experience-item {
+			position: relative;
+			padding-left: 30px;
+			margin-bottom: 25px;
+		}
+
+		.experience-item::before {
 			content: '';
+			position: absolute;
+			left: 8px;
+			top: 8px;
+			width: 2px;
+			height: calc(100% + 10px);
+			background: linear-gradient(180deg, var(--primary-green), transparent);
+		}
+
+		.experience-dot {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 18px;
+			height: 18px;
+			background: var(--primary-green);
+			border-radius: 50%;
+			box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+		}
+
+		.experience-company {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 16px;
+			font-weight: 700;
+			color: var(--primary-green);
+			margin-bottom: 5px;
+		}
+
+		.experience-role {
+			font-size: 14px;
+			font-weight: 600;
+			margin-bottom: 5px;
+		}
+
+		.experience-period {
+			font-size: 12px;
+			color: var(--text-secondary);
+			margin-bottom: 10px;
+		}
+
+		.experience-desc {
+			font-size: 13px;
+			color: var(--text-secondary);
+			line-height: 1.6;
+		}
+
+		/* Projects Section */
+		.project-card {
+			background: rgba(0, 255, 136, 0.05);
+			border: 1px solid rgba(0, 255, 136, 0.2);
+			border-radius: 15px;
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		.project-header {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			margin-bottom: 12px;
+		}
+
+		.project-icon {
+			width: 50px;
+			height: 50px;
+			background: linear-gradient(135deg, var(--primary-green), var(--primary-cyan));
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 24px;
+		}
+
+		.project-title {
+			font-family: 'Orbitron', sans-serif;
+			font-size: 16px;
+			font-weight: 700;
+			color: var(--primary-green);
+		}
+
+		.project-desc {
+			font-size: 13px;
+			color: var(--text-secondary);
+			line-height: 1.6;
+			margin-bottom: 12px;
+		}
+
+		.project-tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.project-tag {
+			font-size: 11px;
+			background: rgba(0, 255, 136, 0.15);
+			color: var(--primary-green);
+			padding: 4px 10px;
+			border-radius: 8px;
+		}
+
+		/* Bottom Navigation */
+		.bottom-nav {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 80px;
+			background: var(--bg-glass);
+			border-top: 1px solid rgba(0, 255, 136, 0.1);
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			padding: 10px 20px;
+		}
+
+		.nav-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 5px;
+			cursor: pointer;
+			opacity: 0.5;
+			transition: all 0.3s;
+		}
+
+		.nav-item.active {
+			opacity: 1;
+		}
+
+		.nav-icon {
+			width: 40px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(0, 255, 136, 0.1);
+			border-radius: 10px;
+			font-size: 20px;
+			transition: all 0.3s;
+		}
+
+		.nav-item.active .nav-icon {
+			background: var(--primary-green);
+			box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+		}
+
+		.nav-label {
+			font-size: 10px;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+		}
+
+		/* Bottom indicator */
+		.phone-indicator {
+			position: absolute;
+			bottom: 5px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 120px;
+			height: 4px;
+			background: rgba(255, 255, 255, 0.3);
+			border-radius: 2px;
+		}
+
+		/* Loading */
+		.loading-screen {
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-			animation: shimmer 2s infinite;
-		}
-
-		/* Rank Progress */
-		.rank-progress {
-			background: rgba(255, 107, 53, 0.1);
-			border: 1px solid rgba(255, 107, 53, 0.3);
-			border-radius: 15px;
-			padding: 20px;
-			margin-top: 30px;
-		}
-
-		.rank-header {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			margin-bottom: 15px;
-		}
-
-		.rank-icon {
-			font-size: 32px;
-		}
-
-		.rank-info h3 {
-			font-family: 'Orbitron', sans-serif;
-			font-size: 14px;
-			color: var(--primary-orange);
-			text-transform: uppercase;
-			letter-spacing: 1px;
-		}
-
-		.rank-info p {
-			font-size: 12px;
-			color: var(--text-secondary);
-		}
-
-		.rank-percentage {
-			font-family: 'Orbitron', sans-serif;
-			font-size: 36px;
-			font-weight: 700;
-			color: var(--primary-orange);
-			text-align: center;
-			margin: 15px 0;
-		}
-
-		.rank-change {
-			font-size: 14px;
-			color: var(--primary-green);
-			text-align: center;
-		}
-
-		.rank-chart {
-			width: 100%;
-			height: 80px;
-			margin-top: 15px;
-		}
-
-		/* Responsive */
-		@media (max-width: 1200px) {
-			.dashboard {
-				grid-template-columns: 300px 1fr 320px;
-			}
-		}
-
-		@media (max-width: 968px) {
-			.dashboard {
-				grid-template-columns: 1fr;
-				grid-template-rows: 50vh auto auto;
-				padding: 0;
-				gap: 0;
-				min-height: 100vh;
-			}
-
-			.sidebar {
-				order: 2;
-				border-right: none;
-				border-top: 1px solid rgba(0, 255, 136, 0.1);
-				padding: 25px 20px;
-			}
-
-			.progress-panel {
-				order: 3;
-				border-left: none;
-				border-top: 1px solid rgba(0, 255, 136, 0.1);
-				padding: 25px 20px;
-			}
-
-			.character-container {
-				order: 1;
-				height: 50vh;
-				position: relative;
-			}
-
-			.character-name {
-				font-size: 28px;
-				margin-bottom: 15px;
-			}
-
-			.xp-section {
-				margin-bottom: 15px;
-			}
-
-			.trophy-section {
-				margin-bottom: 20px;
-			}
-
-			.stat-item {
-				margin-bottom: 15px;
-			}
-
-			.skill-progress {
-				margin-bottom: 18px;
-			}
-
-			.resources {
-				margin-bottom: 20px;
-			}
-
-			.canvas-hint {
-				bottom: 15px;
-				font-size: 11px;
-				padding: 8px 15px;
-			}
-		}
-
-		@media (max-width: 480px) {
-			.dashboard {
-				grid-template-rows: 45vh auto auto;
-				padding: 0;
-				gap: 0;
-			}
-
-			.character-container {
-				height: 45vh;
-			}
-
-			.character-name {
-				font-size: 24px;
-				letter-spacing: 2px;
-				margin-bottom: 12px;
-			}
-
-			.xp-value, .trophy-value {
-				font-size: 22px;
-			}
-
-			.xp-badge {
-				width: 50px;
-				height: 50px;
-				font-size: 24px;
-			}
-
-			.trophy-icon {
-				font-size: 28px;
-			}
-
-			.sidebar, .progress-panel {
-				padding: 20px 15px;
-			}
-
-			.stat-icon {
-				width: 32px;
-				height: 32px;
-				font-size: 16px;
-			}
-
-			.stat-name, .skill-name {
-				font-size: 12px;
-			}
-
-			.progress-title {
-				font-size: 22px;
-				margin-bottom: 20px;
-			}
-
-			.resource-box {
-				padding: 10px;
-			}
-
-			.resource-value {
-				font-size: 18px;
-			}
-
-			.rank-percentage {
-				font-size: 32px;
-			}
-
-			.canvas-hint {
-				bottom: 10px;
-				font-size: 10px;
-				padding: 6px 12px;
-			}
-
-			.xp-section, .trophy-section {
-				margin-bottom: 15px;
-			}
-
-			.stat-item, .skill-progress {
-				margin-bottom: 12px;
-			}
-		}
-
-		/* Loading Screen */
-		.loading-screen {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: #0a0e1a;
+			background: var(--bg-dark);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -642,18 +491,18 @@
 		}
 
 		.loading-spinner {
-			width: 60px;
-			height: 60px;
-			border: 4px solid rgba(0, 255, 136, 0.1);
+			width: 50px;
+			height: 50px;
+			border: 3px solid rgba(0, 255, 136, 0.1);
 			border-top-color: var(--primary-green);
 			border-radius: 50%;
 			animation: spin 1s linear infinite;
 		}
 
 		.loading-text {
-			margin-top: 20px;
+			margin-top: 15px;
 			font-family: 'Orbitron', sans-serif;
-			font-size: 16px;
+			font-size: 14px;
 			color: var(--primary-green);
 			letter-spacing: 2px;
 		}
@@ -661,254 +510,496 @@
 		@keyframes spin {
 			to { transform: rotate(360deg); }
 		}
+
+		/* Hide desktop extra content on mobile */
+		.desktop-extra-content {
+			display: none;
+		}
+
+		/* Desktop view */
+		@media (min-width: 969px) {
+			body {
+				background: radial-gradient(circle at center, #1a1f2e 0%, #0a0e1a 100%);
+				padding: 0;
+				display: block;
+			}
+
+			.phone-container {
+				max-width: 100%;
+				height: 100vh;
+				max-height: none;
+				border-radius: 0;
+				border: none;
+				box-shadow: none;
+				background: transparent;
+			}
+
+			.phone-notch {
+				display: none;
+			}
+
+			.header {
+				display: none;
+			}
+
+			.content-area {
+				height: 100vh;
+				display: flex;
+				gap: 0;
+				overflow: hidden;
+			}
+
+			.section {
+				padding: 30px 20px;
+				display: none;
+				overflow-y: auto;
+				background: rgba(26, 31, 46, 0.75);
+				backdrop-filter: blur(20px);
+			}
+
+			.section::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			.section::-webkit-scrollbar-thumb {
+				background: var(--primary-green);
+				border-radius: 3px;
+			}
+
+			/* Left Column - Skills */
+			#skills-section {
+				display: block !important;
+				width: 350px;
+				border-right: 1px solid rgba(0, 255, 136, 0.1);
+			}
+
+			/* Center Column - Home + Experience + Projects */
+			#home-section {
+				display: block !important;
+				flex: 1;
+				border-right: 1px solid rgba(0, 255, 136, 0.1);
+			}
+
+			#experience-section, #projects-section {
+				display: none !important;
+			}
+
+			.character-section {
+				padding: 30px 20px;
+			}
+
+			.character-name {
+				font-size: 42px;
+			}
+
+			#character-canvas {
+				height: 400px;
+			}
+
+			/* Right Column - Progress */
+			#progress-section {
+				display: block !important;
+				width: 380px;
+			}
+
+			.bottom-nav {
+				display: none;
+			}
+
+			.phone-indicator {
+				display: none;
+			}
+
+			.loading-screen {
+				border-radius: 0;
+			}
+
+			.desktop-extra-content {
+				display: block;
+			}
+		}
 	</style>
 </head>
 <body>
-	<!-- Loading Screen -->
-	<div class="loading-screen" id="loadingScreen">
-		<div class="loading-spinner"></div>
-		<div class="loading-text">LOADING CHARACTER...</div>
-	</div>
+	<div class="phone-container">
+		<!-- Loading Screen -->
+		<div class="loading-screen" id="loadingScreen">
+			<div class="loading-spinner"></div>
+			<div class="loading-text">LOADING...</div>
+		</div>
 
-	<!-- 3D Background -->
-	<canvas id="background-canvas"></canvas>
-	<div class="grid-overlay"></div>
+		<!-- Notch -->
+		<div class="phone-notch"></div>
 
-	<!-- Main Dashboard Layout -->
-	<div class="dashboard">
-		<!-- Left Sidebar: Stats -->
-		<div class="sidebar">
-			<div class="character-name">MARTIN</div>
+		<!-- Header -->
+		<div class="header">
+			<div class="menu-icon">☰</div>
+			<div class="header-badge">🤖</div>
+			<div class="settings-icon">⚙️</div>
+		</div>
 
-			<div class="xp-section">
-				<div class="xp-badge">🤖</div>
-				<div class="xp-info">
-					<div class="xp-label">AI Automation Engineer</div>
-					<div class="xp-value">1.5 <span style="font-size: 16px;">Years</span></div>
-					<div class="xp-subtext">GPA 3.9/4.0 • AWS Certified</div>
+		<!-- Content Area -->
+		<div class="content-area">
+			<!-- Home Section -->
+			<section class="section active" id="home-section">
+				<div class="character-section">
+					<div class="character-name">MARTIN</div>
+					<div class="character-title">AI Automation Engineer</div>
+					<canvas id="character-canvas"></canvas>
+
+					<div class="stats-grid">
+						<div class="stat-card">
+							<div class="stat-icon">💎</div>
+							<div class="stat-value">460</div>
+							<div class="stat-label">XP Points</div>
+						</div>
+						<div class="stat-card" style="background: rgba(255, 107, 53, 0.1); border-color: rgba(255, 107, 53, 0.3);">
+							<div class="stat-icon">🏆</div>
+							<div class="stat-value" style="color: var(--primary-orange);">124</div>
+							<div class="stat-label">Achievements</div>
+						</div>
+						<div class="stat-card">
+							<div class="stat-icon">👥</div>
+							<div class="stat-value">2M+</div>
+							<div class="stat-label">Users Protected</div>
+						</div>
+						<div class="stat-card" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+							<div class="stat-icon">✅</div>
+							<div class="stat-value" style="color: var(--primary-purple);">500+</div>
+							<div class="stat-label">Daily Tests</div>
+						</div>
+					</div>
+
+					<!-- Experience & Projects for Desktop -->
+					<div class="desktop-extra-content">
+						<h2 class="section-title" style="margin-top: 40px;">EXPERIENCE</h2>
+
+						<div class="experience-item">
+							<div class="experience-dot"></div>
+							<div class="experience-company">Fintech Banking Company</div>
+							<div class="experience-role">AI Automation Engineer</div>
+							<div class="experience-period">2023 - Present • 1.5 Years</div>
+							<div class="experience-desc">
+								Built enterprise-grade synthetic monitoring system protecting 2M+ daily active users.
+								Execute 500+ automated health checks daily across 15+ critical banking journeys with
+								30+ minute advance warning before incidents impact customers.
+							</div>
+						</div>
+
+						<div class="experience-item">
+							<div class="experience-dot"></div>
+							<div class="experience-company">University Research</div>
+							<div class="experience-role">Machine Learning Researcher</div>
+							<div class="experience-period">2022 - 2023 • 1 Year</div>
+							<div class="experience-desc">
+								Published sentiment analysis research achieving 81.54% accuracy using SVM.
+								Analyzed 10,000+ data points and published in SINTA 2 indexed journal.
+							</div>
+						</div>
+
+						<h2 class="section-title" style="margin-top: 40px;">FEATURED PROJECTS</h2>
+
+						<div class="project-card">
+							<div class="project-header">
+								<div class="project-icon">🏦</div>
+								<div>
+									<div class="project-title">Banking Automation Monitor</div>
+								</div>
+							</div>
+							<div class="project-desc">
+								Enterprise-grade synthetic monitoring system executing 500+ daily health checks
+								across 15+ critical banking journeys, protecting 2M+ users with 30-min advance warning.
+							</div>
+							<div class="project-tags">
+								<span class="project-tag">Appium</span>
+								<span class="project-tag">Python</span>
+								<span class="project-tag">MySQL</span>
+								<span class="project-tag">AWS</span>
+							</div>
+						</div>
+
+						<div class="project-card">
+							<div class="project-header">
+								<div class="project-icon">🔄</div>
+								<div>
+									<div class="project-title">N8N AI Workflows</div>
+								</div>
+							</div>
+							<div class="project-desc">
+								Production-ready intelligent automation workflows for DevOps operations.
+								Saved ~10 hours weekly through automated incident routing and escalation.
+							</div>
+							<div class="project-tags">
+								<span class="project-tag">n8n</span>
+								<span class="project-tag">Webhooks</span>
+								<span class="project-tag">MySQL</span>
+								<span class="project-tag">Docker</span>
+							</div>
+						</div>
+					</div>
 				</div>
+			</section>
+
+			<!-- Skills Section -->
+			<section class="section" id="skills-section">
+				<h2 class="section-title">SKILL SETUP</h2>
+
+				<div class="skill-item">
+					<div class="skill-header">
+						<div class="skill-icon">🐍</div>
+						<div class="skill-info">
+							<div class="skill-name">Python Mastery</div>
+						</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 95%"></div>
+					</div>
+				</div>
+
+				<div class="skill-item">
+					<div class="skill-header">
+						<div class="skill-icon" style="background: rgba(168, 85, 247, 0.15);">📱</div>
+						<div class="skill-info">
+							<div class="skill-name">Appium Expert</div>
+						</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 95%; background: linear-gradient(90deg, #a855f7, #ec4899);"></div>
+					</div>
+				</div>
+
+				<div class="skill-item">
+					<div class="skill-header">
+						<div class="skill-icon" style="background: rgba(0, 255, 255, 0.15);">🔄</div>
+						<div class="skill-info">
+							<div class="skill-name">N8N Workflows</div>
+						</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 90%; background: linear-gradient(90deg, #00ffff, #00ff88);"></div>
+					</div>
+				</div>
+
+				<div class="skill-item">
+					<div class="skill-header">
+						<div class="skill-icon" style="background: rgba(255, 107, 53, 0.15);">☁️</div>
+						<div class="skill-info">
+							<div class="skill-name">AWS Cloud</div>
+						</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 80%; background: linear-gradient(90deg, #ff6b35, #fbbf24);"></div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Progress Section -->
+			<section class="section" id="progress-section">
+				<h2 class="section-title">PROGRESS</h2>
+
+				<div class="progress-item">
+					<div class="progress-header">
+						<div class="progress-name">Test Automation</div>
+						<div class="progress-level">EXPERT</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 95%"></div>
+					</div>
+				</div>
+
+				<div class="progress-item">
+					<div class="progress-header">
+						<div class="progress-name">Synthetic Monitoring</div>
+						<div class="progress-level">EXPERT</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 90%"></div>
+					</div>
+				</div>
+
+				<div class="progress-item">
+					<div class="progress-header">
+						<div class="progress-name">Python Development</div>
+						<div class="progress-level">EXPERT</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 95%"></div>
+					</div>
+				</div>
+
+				<div class="progress-item">
+					<div class="progress-header">
+						<div class="progress-name">Workflow Automation</div>
+						<div class="progress-level">EXPERT</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 90%"></div>
+					</div>
+				</div>
+
+				<div class="progress-item">
+					<div class="progress-header">
+						<div class="progress-name">JavaScript</div>
+						<div class="progress-level">ADV</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 80%"></div>
+					</div>
+				</div>
+
+				<div class="progress-item">
+					<div class="progress-header">
+						<div class="progress-name">MySQL/Database</div>
+						<div class="progress-level">ADV</div>
+					</div>
+					<div class="skill-bar">
+						<div class="skill-fill" style="width: 85%"></div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Experience Section -->
+			<section class="section" id="experience-section">
+				<h2 class="section-title">EXPERIENCE</h2>
+
+				<div class="experience-item">
+					<div class="experience-dot"></div>
+					<div class="experience-company">Fintech Banking Company</div>
+					<div class="experience-role">AI Automation Engineer</div>
+					<div class="experience-period">2023 - Present • 1.5 Years</div>
+					<div class="experience-desc">
+						Built enterprise-grade synthetic monitoring system protecting 2M+ daily active users.
+						Execute 500+ automated health checks daily across 15+ critical banking journeys with
+						30+ minute advance warning before incidents impact customers.
+					</div>
+				</div>
+
+				<div class="experience-item">
+					<div class="experience-dot"></div>
+					<div class="experience-company">University Research</div>
+					<div class="experience-role">Machine Learning Researcher</div>
+					<div class="experience-period">2022 - 2023 • 1 Year</div>
+					<div class="experience-desc">
+						Published sentiment analysis research achieving 81.54% accuracy using SVM.
+						Analyzed 10,000+ data points and published in SINTA 2 indexed journal.
+					</div>
+				</div>
+			</section>
+
+			<!-- Projects Section -->
+			<section class="section" id="projects-section">
+				<h2 class="section-title">PROJECTS</h2>
+
+				<div class="project-card">
+					<div class="project-header">
+						<div class="project-icon">🏦</div>
+						<div>
+							<div class="project-title">Banking Automation Monitor</div>
+						</div>
+					</div>
+					<div class="project-desc">
+						Enterprise-grade synthetic monitoring system executing 500+ daily health checks
+						across 15+ critical banking journeys, protecting 2M+ users with 30-min advance warning.
+					</div>
+					<div class="project-tags">
+						<span class="project-tag">Appium</span>
+						<span class="project-tag">Python</span>
+						<span class="project-tag">MySQL</span>
+						<span class="project-tag">AWS</span>
+					</div>
+				</div>
+
+				<div class="project-card">
+					<div class="project-header">
+						<div class="project-icon">🔄</div>
+						<div>
+							<div class="project-title">N8N AI Workflows</div>
+						</div>
+					</div>
+					<div class="project-desc">
+						Production-ready intelligent automation workflows for DevOps operations.
+						Saved ~10 hours weekly through automated incident routing and escalation.
+					</div>
+					<div class="project-tags">
+						<span class="project-tag">n8n</span>
+						<span class="project-tag">Webhooks</span>
+						<span class="project-tag">MySQL</span>
+						<span class="project-tag">Docker</span>
+					</div>
+				</div>
+
+				<div class="project-card">
+					<div class="project-header">
+						<div class="project-icon">📊</div>
+						<div>
+							<div class="project-title">Sentiment Analysis Research</div>
+						</div>
+					</div>
+					<div class="project-desc">
+						Published research achieving 81.54% accuracy using SVM for sentiment classification.
+						Analyzed 10,000+ data points, published in SINTA 2 indexed journal.
+					</div>
+					<div class="project-tags">
+						<span class="project-tag">Python</span>
+						<span class="project-tag">scikit-learn</span>
+						<span class="project-tag">NLP</span>
+						<span class="project-tag">SVM</span>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- Bottom Navigation -->
+		<div class="bottom-nav">
+			<div class="nav-item active" data-section="home-section">
+				<div class="nav-icon">🏠</div>
 			</div>
-
-			<div class="trophy-section">
-				<div class="trophy-icon">👥</div>
-				<div class="trophy-info">
-					<div class="trophy-label">Users Protected</div>
-					<div class="trophy-value">2M+</div>
-				</div>
+			<div class="nav-item" data-section="skills-section">
+				<div class="nav-icon">⚡</div>
 			</div>
-
-			<div class="stats-section">
-				<div class="stat-item">
-					<div class="stat-header">
-						<div class="stat-icon">🐍</div>
-						<div class="stat-name">Python Mastery</div>
-					</div>
-					<div class="stat-bar">
-						<div class="stat-fill" style="width: 95%"></div>
-					</div>
-				</div>
-
-				<div class="stat-item">
-					<div class="stat-header">
-						<div class="stat-icon magic">📱</div>
-						<div class="stat-name">Appium Expert</div>
-					</div>
-					<div class="stat-bar">
-						<div class="stat-fill magic" style="width: 95%"></div>
-					</div>
-				</div>
-
-				<div class="stat-item">
-					<div class="stat-header">
-						<div class="stat-icon shield">🔄</div>
-						<div class="stat-name">N8N Workflows</div>
-					</div>
-					<div class="stat-bar">
-						<div class="stat-fill shield" style="width: 90%"></div>
-					</div>
-				</div>
-
-				<div class="stat-item">
-					<div class="stat-header">
-						<div class="stat-icon health">☁️</div>
-						<div class="stat-name">AWS Cloud</div>
-					</div>
-					<div class="stat-bar">
-						<div class="stat-fill health" style="width: 80%"></div>
-					</div>
-				</div>
+			<div class="nav-item" data-section="progress-section">
+				<div class="nav-icon">🏆</div>
+			</div>
+			<div class="nav-item" data-section="experience-section">
+				<div class="nav-icon">💼</div>
+			</div>
+			<div class="nav-item" data-section="projects-section">
+				<div class="nav-icon">📱</div>
 			</div>
 		</div>
 
-		<!-- Center: 3D Character -->
-		<div class="character-container">
-			<canvas id="character-canvas"></canvas>
-			<div class="canvas-hint">🖱️ Drag to rotate • Click to animate</div>
-		</div>
-
-		<!-- Right Panel: Progress -->
-		<div class="progress-panel">
-			<div class="resources">
-				<div class="resource-box">
-					<div class="resource-icon">✅</div>
-					<div class="resource-value">500+</div>
-					<div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">Daily Tests</div>
-				</div>
-				<div class="resource-box gold">
-					<div class="resource-icon">🏃</div>
-					<div class="resource-value">15+</div>
-					<div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">Journeys</div>
-				</div>
-			</div>
-
-			<div class="progress-title">EXPERTISE</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Test Automation</div>
-					<div class="skill-level">EXPERT</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 95%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Synthetic Monitoring</div>
-					<div class="skill-level">EXPERT</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 90%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Python Development</div>
-					<div class="skill-level">EXPERT</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 95%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Workflow Automation</div>
-					<div class="skill-level">EXPERT</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 90%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">JavaScript</div>
-					<div class="skill-level">ADV</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 80%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">MySQL/Database</div>
-					<div class="skill-level">ADV</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 85%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Docker/DevOps</div>
-					<div class="skill-level">ADV</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 75%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Machine Learning</div>
-					<div class="skill-level">ADV</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 80%"></div>
-				</div>
-			</div>
-
-			<div class="rank-progress">
-				<div class="rank-header">
-					<div class="rank-icon">⚡</div>
-					<div class="rank-info">
-						<h3>Impact Score</h3>
-						<p>Daily Tests × Journeys</p>
-					</div>
-				</div>
-				<div class="rank-percentage">500+</div>
-				<div class="rank-change">📈 15+ Journeys</div>
-				<canvas class="rank-chart" id="rank-chart"></canvas>
-			</div>
-		</div>
+		<!-- Bottom Indicator -->
+		<div class="phone-indicator"></div>
 	</div>
 
 	<script>
-		// ===== BACKGROUND PARTICLES =====
-		const bgCanvas = document.getElementById('background-canvas');
-		const bgScene = new THREE.Scene();
-		const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-		const bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
-		bgRenderer.setSize(window.innerWidth, window.innerHeight);
-		bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		// Navigation
+		const navItems = document.querySelectorAll('.nav-item');
+		const sections = document.querySelectorAll('.section');
 
-		// Particle system
-		const particleGeometry = new THREE.BufferGeometry();
-		const particleCount = 1000;
-		const positions = new Float32Array(particleCount * 3);
+		navItems.forEach(item => {
+			item.addEventListener('click', () => {
+				const targetSection = item.getAttribute('data-section');
 
-		for (let i = 0; i < particleCount * 3; i++) {
-			positions[i] = (Math.random() - 0.5) * 200;
-		}
+				// Update active nav
+				navItems.forEach(nav => nav.classList.remove('active'));
+				item.classList.add('active');
 
-		particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-		const particleMaterial = new THREE.PointsMaterial({
-			color: 0x00ff88,
-			size: 0.8,
-			transparent: true,
-			opacity: 0.6,
-			blending: THREE.AdditiveBlending
+				// Update active section
+				sections.forEach(section => section.classList.remove('active'));
+				document.getElementById(targetSection).classList.add('active');
+			});
 		});
 
-		const particles = new THREE.Points(particleGeometry, particleMaterial);
-		bgScene.add(particles);
-
-		bgCamera.position.z = 50;
-
-		function animateBackground() {
-			requestAnimationFrame(animateBackground);
-			particles.rotation.y += 0.0005;
-			particles.rotation.x += 0.0002;
-			bgRenderer.render(bgScene, bgCamera);
-		}
-		animateBackground();
-
-		// ===== CHARACTER CANVAS =====
+		// Three.js Character
 		const charCanvas = document.getElementById('character-canvas');
 		const charScene = new THREE.Scene();
-		const charCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+		const charCamera = new THREE.PerspectiveCamera(45, charCanvas.offsetWidth / charCanvas.offsetHeight, 0.1, 1000);
 		const charRenderer = new THREE.WebGLRenderer({ canvas: charCanvas, alpha: true, antialias: true });
 
 		function resizeCharacterCanvas() {
-			const container = charCanvas.parentElement;
-			const width = container.offsetWidth;
-			const height = container.offsetHeight;
+			const width = charCanvas.offsetWidth;
+			const height = 300;
 			charCamera.aspect = width / height;
 			charCamera.updateProjectionMatrix();
 			charRenderer.setSize(width, height);
@@ -925,35 +1016,20 @@
 
 		const directionalLight = new THREE.DirectionalLight(0x00ff88, 1.2);
 		directionalLight.position.set(5, 10, 7.5);
-		directionalLight.castShadow = true;
 		charScene.add(directionalLight);
 
-		// Character variables
 		let character = null;
 		let mixer = null;
 		let clock = new THREE.Clock();
 		let animations = [];
-		let head = null;
-		let leftArm = null;
-		let rightArm = null;
-		let wireframe = null;
 		let model = null;
 
-		// Initial camera position based on screen size
-		const initialIsMobile = window.innerWidth <= 968;
-		if (initialIsMobile) {
-			charCamera.position.set(0, 0.2, 3);
-			charCamera.lookAt(0, 0.2, 0);
-		} else {
-			charCamera.position.set(0, 0.3, 3.5);
-			charCamera.lookAt(0, 0.3, 0);
-		}
+		charCamera.position.set(0, 0.2, 3);
+		charCamera.lookAt(0, 0.2, 0);
 
-		// Load 3D Character Model
+		// Load model
 		const loader = new THREE.GLTFLoader();
 		const loadingScreen = document.getElementById('loadingScreen');
-
-		// Using RobotExpressive from Three.js examples (free CDN model)
 		const modelURL = 'https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb';
 
 		loader.load(
@@ -962,19 +1038,11 @@
 				model = gltf.scene;
 				character = model;
 
-				// Scale and position the model based on screen size
-				const isMobile = window.innerWidth <= 968;
-				const scale = isMobile ? 0.3 : 0.4;
-				model.scale.set(scale, scale, scale);
-				model.position.y = isMobile ? -0.4 : -0.5;
+				model.scale.set(0.3, 0.3, 0.3);
+				model.position.y = -0.4;
 
-				// Apply custom colors to materials
 				model.traverse((child) => {
 					if (child.isMesh) {
-						child.castShadow = true;
-						child.receiveShadow = true;
-
-						// Add emissive glow effect
 						if (child.material) {
 							child.material.emissive = new THREE.Color(0x00ff88);
 							child.material.emissiveIntensity = 0.2;
@@ -984,48 +1052,20 @@
 
 				charScene.add(model);
 
-				// Setup animations
 				if (gltf.animations && gltf.animations.length > 0) {
 					mixer = new THREE.AnimationMixer(model);
 					animations = gltf.animations;
 
-					// Play idle animation by default
 					const idleAnimation = animations.find(anim => anim.name.toLowerCase().includes('idle'));
 					if (idleAnimation) {
 						const action = mixer.clipAction(idleAnimation);
 						action.play();
-					} else {
-						// Play first animation if no idle found
-						const action = mixer.clipAction(animations[0]);
-						action.play();
 					}
 				}
 
-				// Add wireframe overlay
-				const wireframeGeometry = new THREE.IcosahedronGeometry(3, 1);
-				const wireframeMaterial = new THREE.MeshBasicMaterial({
-					color: 0x00ff88,
-					wireframe: true,
-					transparent: true,
-					opacity: 0.1
-				});
-				wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
-				wireframe.position.y = 0.5;
-				charScene.add(wireframe);
-
-				// Hide loading screen
 				setTimeout(() => {
 					loadingScreen.classList.add('hidden');
 				}, 500);
-			},
-			function (xhr) {
-				const percentComplete = (xhr.loaded / xhr.total) * 100;
-				console.log('Loading: ' + Math.round(percentComplete) + '%');
-			},
-			function (error) {
-				console.error('Error loading model:', error);
-				// Hide loading screen even on error
-				loadingScreen.classList.add('hidden');
 			}
 		);
 
@@ -1034,7 +1074,6 @@
 		let previousMousePosition = { x: 0, y: 0 };
 		let targetRotation = { x: 0, y: 0 };
 		let currentRotation = { x: 0, y: 0 };
-		let isAnimating = false;
 
 		charCanvas.addEventListener('mousedown', (e) => {
 			isDragging = true;
@@ -1044,21 +1083,12 @@
 		charCanvas.addEventListener('mousemove', (e) => {
 			if (isDragging) {
 				const deltaX = e.clientX - previousMousePosition.x;
-				const deltaY = e.clientY - previousMousePosition.y;
-
 				targetRotation.y += deltaX * 0.01;
-				targetRotation.x += deltaY * 0.01;
-				targetRotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, targetRotation.x));
-
 				previousMousePosition = { x: e.clientX, y: e.clientY };
 			}
 		});
 
 		charCanvas.addEventListener('mouseup', () => {
-			isDragging = false;
-		});
-
-		charCanvas.addEventListener('mouseleave', () => {
 			isDragging = false;
 		});
 
@@ -1071,12 +1101,7 @@
 		charCanvas.addEventListener('touchmove', (e) => {
 			if (isDragging) {
 				const deltaX = e.touches[0].clientX - previousMousePosition.x;
-				const deltaY = e.touches[0].clientY - previousMousePosition.y;
-
 				targetRotation.y += deltaX * 0.01;
-				targetRotation.x += deltaY * 0.01;
-				targetRotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, targetRotation.x));
-
 				previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 			}
 		});
@@ -1085,153 +1110,32 @@
 			isDragging = false;
 		});
 
-		// Click animation - play random animation from loaded model
-		charCanvas.addEventListener('click', () => {
-			if (!isAnimating && mixer && animations.length > 0) {
-				isAnimating = true;
-
-				// Stop current animations
-				mixer.stopAllAction();
-
-				// Play random animation
-				const randomAnim = animations[Math.floor(Math.random() * animations.length)];
-				const action = mixer.clipAction(randomAnim);
-				action.setLoop(THREE.LoopOnce);
-				action.clampWhenFinished = true;
-				action.reset();
-				action.play();
-
-				// Reset to idle after animation finishes
-				setTimeout(() => {
-					const idleAnimation = animations.find(anim => anim.name.toLowerCase().includes('idle'));
-					if (idleAnimation) {
-						mixer.stopAllAction();
-						const idleAction = mixer.clipAction(idleAnimation);
-						idleAction.reset();
-						idleAction.play();
-					}
-					isAnimating = false;
-				}, randomAnim.duration * 1000);
-			}
-		});
-
 		function animateCharacter() {
 			requestAnimationFrame(animateCharacter);
 
 			const delta = clock.getDelta();
 
-			// Update animation mixer
 			if (mixer) {
 				mixer.update(delta);
 			}
 
-			// Smooth rotation
-			currentRotation.x += (targetRotation.x - currentRotation.x) * 0.1;
 			currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
 
 			if (character) {
-				character.rotation.x = currentRotation.x;
 				character.rotation.y = currentRotation.y;
 
-				// Auto-rotate when not dragging
-				if (!isDragging && !isAnimating) {
+				if (!isDragging) {
 					targetRotation.y += 0.002;
 				}
 			}
 
-			// Pulsing lights
 			directionalLight.intensity = 1.2 + Math.sin(Date.now() * 0.001) * 0.2;
-
-			// Animate wireframe overlay
-			if (wireframe) {
-				wireframe.rotation.y += 0.005;
-				wireframe.rotation.x += 0.003;
-			}
 
 			charRenderer.render(charScene, charCamera);
 		}
 		animateCharacter();
 
-		// Rank chart
-		const rankChartCanvas = document.getElementById('rank-chart');
-		const ctx = rankChartCanvas.getContext('2d');
-		rankChartCanvas.width = rankChartCanvas.offsetWidth * 2;
-		rankChartCanvas.height = rankChartCanvas.offsetHeight * 2;
-
-		function drawRankChart() {
-			const width = rankChartCanvas.width;
-			const height = rankChartCanvas.height;
-			const points = 50;
-			const data = [];
-
-			for (let i = 0; i < points; i++) {
-				data.push(Math.random() * 0.4 + 0.3 + Math.sin(i * 0.2) * 0.2);
-			}
-
-			ctx.clearRect(0, 0, width, height);
-
-			// Draw gradient fill
-			const gradient = ctx.createLinearGradient(0, 0, 0, height);
-			gradient.addColorStop(0, 'rgba(255, 107, 53, 0.4)');
-			gradient.addColorStop(1, 'rgba(255, 107, 53, 0)');
-
-			ctx.beginPath();
-			ctx.moveTo(0, height);
-
-			for (let i = 0; i < points; i++) {
-				const x = (i / (points - 1)) * width;
-				const y = height - (data[i] * height);
-				ctx.lineTo(x, y);
-			}
-
-			ctx.lineTo(width, height);
-			ctx.closePath();
-			ctx.fillStyle = gradient;
-			ctx.fill();
-
-			// Draw line
-			ctx.beginPath();
-			for (let i = 0; i < points; i++) {
-				const x = (i / (points - 1)) * width;
-				const y = height - (data[i] * height);
-
-				if (i === 0) {
-					ctx.moveTo(x, y);
-				} else {
-					ctx.lineTo(x, y);
-				}
-			}
-			ctx.strokeStyle = '#ff6b35';
-			ctx.lineWidth = 4;
-			ctx.stroke();
-		}
-		drawRankChart();
-
-		// Resize handler
-		window.addEventListener('resize', () => {
-			bgCamera.aspect = window.innerWidth / window.innerHeight;
-			bgCamera.updateProjectionMatrix();
-			bgRenderer.setSize(window.innerWidth, window.innerHeight);
-
-			resizeCharacterCanvas();
-
-			// Adjust model scale and camera for mobile
-			if (model) {
-				const isMobile = window.innerWidth <= 968;
-				const scale = isMobile ? 0.3 : 0.4;
-				model.scale.set(scale, scale, scale);
-				model.position.y = isMobile ? -0.4 : -0.5;
-
-				// Adjust camera position for mobile
-				if (isMobile) {
-					charCamera.position.set(0, 0.2, 3);
-					charCamera.lookAt(0, 0.2, 0);
-				} else {
-					charCamera.position.set(0, 0.3, 3.5);
-					charCamera.lookAt(0, 0.3, 0);
-				}
-			}
-		});
+		window.addEventListener('resize', resizeCharacterCanvas);
 	</script>
 </body>
 </html>
