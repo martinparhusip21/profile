@@ -107,10 +107,22 @@
 			transition: all 0.3s ease;
 			border-radius: 8px;
 			margin-bottom: 5px;
+			position: relative;
+		}
+
+		.nav-sidebar.hidden .nav-toggle {
+			transform: translateX(50px);
+			background: rgba(13, 18, 17, 0.95);
+			backdrop-filter: blur(20px);
+			border: 1px solid rgba(72, 239, 160, 0.2);
 		}
 
 		.nav-toggle:hover {
 			background: rgba(72, 239, 160, 0.08);
+		}
+
+		.nav-sidebar.hidden .nav-toggle:hover {
+			background: rgba(72, 239, 160, 0.15);
 		}
 
 		.hamburger {
@@ -730,6 +742,13 @@
 			font-size: 24px;
 		}
 
+		.item-icon svg {
+			width: 28px;
+			height: 28px;
+			stroke: #0d1211;
+			stroke-width: 2.5;
+		}
+
 		.item-title {
 			flex: 1;
 		}
@@ -1157,20 +1176,6 @@
 			<div class="stats-section">
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-							</svg>
-						</div>
-						<div class="stat-name">Grafana & Monitoring</div>
-					</div>
-					<div class="stat-bar">
-						<div class="stat-fill" style="width: 95%"></div>
-					</div>
-				</div>
-
-				<div class="stat-item">
-					<div class="stat-header">
 						<div class="stat-icon magic">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 								<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
@@ -1184,6 +1189,20 @@
 					</div>
 					<div class="stat-bar">
 						<div class="stat-fill magic" style="width: 95%"></div>
+					</div>
+				</div>
+
+				<div class="stat-item">
+					<div class="stat-header">
+						<div class="stat-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+							</svg>
+						</div>
+						<div class="stat-name">Grafana & Monitoring</div>
+					</div>
+					<div class="stat-bar">
+						<div class="stat-fill" style="width: 95%"></div>
 					</div>
 				</div>
 
@@ -1354,7 +1373,11 @@
 
 				<div class="experience-item">
 					<div class="item-header">
-						<div class="item-icon">📊</div>
+						<div class="item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+							</svg>
+						</div>
 						<div class="item-title">
 							<h3>IT Service Monitoring</h3>
 							<div class="item-meta">
@@ -1377,7 +1400,12 @@
 
 				<div class="experience-item">
 					<div class="item-header">
-						<div class="item-icon">🛠️</div>
+						<div class="item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<circle cx="12" cy="12" r="3"></circle>
+								<path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"></path>
+							</svg>
+						</div>
 						<div class="item-title">
 							<h3>IT Production Support</h3>
 							<div class="item-meta">
@@ -1399,7 +1427,12 @@
 
 				<div class="experience-item">
 					<div class="item-header">
-						<div class="item-icon">💻</div>
+						<div class="item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="16 18 22 12 16 6"></polyline>
+								<polyline points="8 6 2 12 8 18"></polyline>
+							</svg>
+						</div>
 						<div class="item-title">
 							<h3>Web Developer</h3>
 							<div class="item-meta">
@@ -1428,7 +1461,12 @@
 
 				<div class="project-item">
 					<div class="item-header">
-						<div class="item-icon">📱</div>
+						<div class="item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+								<line x1="12" y1="18" x2="12.01" y2="18"></line>
+							</svg>
+						</div>
 						<div class="item-title">
 							<h3>Synthetic Monitoring Mobile and Web Apps</h3>
 							<div class="item-meta">
@@ -1451,7 +1489,12 @@
 
 				<div class="project-item">
 					<div class="item-header">
-						<div class="item-icon">🔔</div>
+						<div class="item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+								<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+							</svg>
+						</div>
 						<div class="item-title">
 							<h3>Escalation Alerting Systems</h3>
 							<div class="item-meta">
@@ -1474,7 +1517,11 @@
 
 				<div class="project-item">
 					<div class="item-header">
-						<div class="item-icon">💬</div>
+						<div class="item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+							</svg>
+						</div>
 						<div class="item-title">
 							<h3>Sentiment Analysis - Kanjuruhan Tragedy</h3>
 							<div class="item-meta">
