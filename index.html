@@ -257,6 +257,13 @@
 			box-shadow: 0 0 25px rgba(72, 239, 160, 0.5);
 		}
 
+		.xp-badge svg {
+			width: 32px;
+			height: 32px;
+			stroke: #0d1211;
+			stroke-width: 2.5;
+		}
+
 		.xp-info {
 			flex: 1;
 		}
@@ -294,6 +301,16 @@
 
 		.trophy-icon {
 			font-size: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.trophy-icon svg {
+			width: 28px;
+			height: 28px;
+			stroke: var(--warm-gold);
+			stroke-width: 2;
 		}
 
 		.trophy-info {
@@ -341,9 +358,21 @@
 			font-size: 18px;
 		}
 
+		.stat-icon svg {
+			width: 20px;
+			height: 20px;
+			stroke: var(--primary-green);
+			stroke-width: 2;
+		}
+
 		.stat-icon.magic { background: rgba(168, 85, 247, 0.15); }
+		.stat-icon.magic svg { stroke: #a855f7; }
+
 		.stat-icon.shield { background: rgba(0, 255, 255, 0.15); }
+		.stat-icon.shield svg { stroke: #00ffff; }
+
 		.stat-icon.health { background: rgba(255, 107, 53, 0.15); }
+		.stat-icon.health svg { stroke: #ff6b35; }
 
 		.stat-name {
 			font-size: 14px;
@@ -466,6 +495,20 @@
 		.resource-icon {
 			font-size: 24px;
 			margin-bottom: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.resource-icon svg {
+			width: 24px;
+			height: 24px;
+			stroke: var(--primary-green);
+			stroke-width: 2;
+		}
+
+		.resource-box.gold .resource-icon svg {
+			stroke: var(--warm-gold);
 		}
 
 		.resource-value {
@@ -1086,16 +1129,25 @@
 			<div class="character-name">MARTIN</div>
 
 			<div class="xp-section">
-				<div class="xp-badge">📊</div>
+				<div class="xp-badge">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+					</svg>
+				</div>
 				<div class="xp-info">
-					<div class="xp-label">IT Service Monitoring</div>
+					<div class="xp-label">Automation & Monitoring</div>
 					<div class="xp-value">1.5+ <span style="font-size: 16px;">Years</span></div>
 					<div class="xp-subtext">GPA 3.9/4.0 • AWS Certified</div>
 				</div>
 			</div>
 
 			<div class="trophy-section">
-				<div class="trophy-icon">🏦</div>
+				<div class="trophy-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+						<polyline points="9 22 9 12 15 12 15 22"></polyline>
+					</svg>
+				</div>
 				<div class="trophy-info">
 					<div class="trophy-label">Banking Services</div>
 					<div class="trophy-value">BTPN Syariah</div>
@@ -1105,7 +1157,11 @@
 			<div class="stats-section">
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon">📊</div>
+						<div class="stat-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+							</svg>
+						</div>
 						<div class="stat-name">Grafana & Monitoring</div>
 					</div>
 					<div class="stat-bar">
@@ -1115,17 +1171,30 @@
 
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon magic">🐍</div>
-						<div class="stat-name">Python & Automation</div>
+						<div class="stat-icon magic">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+								<circle cx="5" cy="5" r="2"></circle>
+								<circle cx="19" cy="5" r="2"></circle>
+								<circle cx="5" cy="19" r="2"></circle>
+								<circle cx="19" cy="19" r="2"></circle>
+							</svg>
+						</div>
+						<div class="stat-name">Workflow Automation</div>
 					</div>
 					<div class="stat-bar">
-						<div class="stat-fill magic" style="width: 90%"></div>
+						<div class="stat-fill magic" style="width: 95%"></div>
 					</div>
 				</div>
 
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon shield">📱</div>
+						<div class="stat-icon shield">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+								<line x1="12" y1="18" x2="12.01" y2="18"></line>
+							</svg>
+						</div>
 						<div class="stat-name">Appium & Selenium</div>
 					</div>
 					<div class="stat-bar">
@@ -1135,7 +1204,11 @@
 
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon health">☁️</div>
+						<div class="stat-icon health">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+							</svg>
+						</div>
 						<div class="stat-name">AWS & Cloud</div>
 					</div>
 					<div class="stat-bar">
@@ -1148,21 +1221,29 @@
 		<!-- Center: 3D Character -->
 		<div class="character-container">
 			<canvas id="character-canvas"></canvas>
-			<div class="canvas-hint">🖱️ Drag to rotate • Click to animate</div>
+			<div class="canvas-hint">Drag to rotate • Click to animate</div>
 		</div>
 
 		<!-- Right Panel: Progress -->
 		<div class="progress-panel">
 			<div class="resources">
 				<div class="resource-box">
-					<div class="resource-icon">✅</div>
+					<div class="resource-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<polyline points="20 6 9 17 4 12"></polyline>
+						</svg>
+					</div>
 					<div class="resource-value">500+</div>
 					<div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">Daily Tests</div>
 				</div>
 				<div class="resource-box gold">
-					<div class="resource-icon">🏃</div>
+					<div class="resource-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+						</svg>
+					</div>
 					<div class="resource-value">15+</div>
-					<div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">Journeys</div>
+					<div style="font-size: 10px; color: var(--text-secondary); margin-top: 3px;">Workflows</div>
 				</div>
 			</div>
 
@@ -1220,11 +1301,11 @@
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">Power Automate</div>
-					<div class="skill-level">ADV</div>
+					<div class="skill-name">n8n & Power Automate</div>
+					<div class="skill-level">EXPERT</div>
 				</div>
 				<div class="skill-bar">
-					<div class="skill-fill" style="width: 80%"></div>
+					<div class="skill-fill" style="width: 90%"></div>
 				</div>
 			</div>
 
