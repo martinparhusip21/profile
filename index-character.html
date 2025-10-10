@@ -1884,31 +1884,32 @@
 								playSectionAnimation(sectionId);
 								currentActiveSection = sectionId;
 							}
-						} else {
+						} else if (sectionId === 'home-section') {
+							// Explicitly hide character when home section is visible
 							isInExperienceOrProjects = false;
 							sharedCharContainer.classList.remove('visible');
 							currentActiveSection = null;
 						}
 					}
 				}
-				// If section is leaving viewport
-				else if (!entry.isIntersecting) {
+				// When section is leaving viewport
+				else if (!entry.isIntersecting && entry.intersectionRatio < 0.1) {
+					// If experience/projects is leaving, check if we should hide character
 					if (sectionId === 'experience' || sectionId === 'projects') {
-						// Check if we're still in any experience/projects section
-						const experienceSection = document.getElementById('experience');
-						const projectsSection = document.getElementById('projects');
+						// Only hide if both sections are not visible
+						setTimeout(() => {
+							const expVisible = document.getElementById('experience')?.getBoundingClientRect();
+							const projVisible = document.getElementById('projects')?.getBoundingClientRect();
 
-						const expRect = experienceSection ? experienceSection.getBoundingClientRect() : null;
-						const projRect = projectsSection ? projectsSection.getBoundingClientRect() : null;
+							const expInView = expVisible && expVisible.top < window.innerHeight * 0.8 && expVisible.bottom > window.innerHeight * 0.2;
+							const projInView = projVisible && projVisible.top < window.innerHeight * 0.8 && projVisible.bottom > window.innerHeight * 0.2;
 
-						const stillInRange = (expRect && expRect.top < window.innerHeight && expRect.bottom > 0) ||
-						                     (projRect && projRect.top < window.innerHeight && projRect.bottom > 0);
-
-						if (!stillInRange && sharedCharContainer) {
-							sharedCharContainer.classList.remove('visible');
-							currentActiveSection = null;
-							isInExperienceOrProjects = false;
-						}
+							if (!expInView && !projInView && sharedCharContainer) {
+								sharedCharContainer.classList.remove('visible');
+								currentActiveSection = null;
+								isInExperienceOrProjects = false;
+							}
+						}, 100);
 					}
 				}
 			});
@@ -1928,10 +1929,25 @@
 			sectionObserver.observe(dashboardSection);
 		}
 
+		// Failsafe: Simple scroll listener to ensure character hidden at top
+		let scrollTimeout;
+		window.addEventListener('scroll', () => {
+			clearTimeout(scrollTimeout);
+			scrollTimeout = setTimeout(() => {
+				if (window.scrollY < 50 && sharedCharContainer) {
+					sharedCharContainer.classList.remove('visible');
+					currentActiveSection = null;
+					isInExperienceOrProjects = false;
+				}
+			}, 50);
+		}, { passive: true });
+
 		// Ensure character is hidden on initial page load
 		window.addEventListener('load', () => {
-			if (sharedCharContainer && window.scrollY < 100) {
+			if (sharedCharContainer) {
 				sharedCharContainer.classList.remove('visible');
+				currentActiveSection = null;
+				isInExperienceOrProjects = false;
 			}
 		});
 	</script>
