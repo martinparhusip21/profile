@@ -24,19 +24,27 @@
 		}
 
 		:root {
-			--primary-green: #00ff88;
+			--primary-green: #48EFA0;
+		--mint-green: #5dd9a5;
+		--dark-green: #1a1f1e;
+		--grey-green: #1e2322;
+		--gold-orange: #E7A540;
+		--warm-gold: #FFCD73;
+		--light-text: #E8F2EB;
+		--alert-red: #F26C4F;
+		--bg-gradient-light: #B6F0CC;
 			--primary-cyan: #00ffff;
 			--primary-orange: #ff6b35;
 			--primary-purple: #a855f7;
-			--bg-dark: #0a0e1a;
-			--bg-card: rgba(21, 27, 45, 0.9);
+			--bg-dark: #0d1211;
+			--bg-card: rgba(26, 31, 30, 0.85);
 			--text-primary: #ffffff;
-			--text-secondary: #94a3b8;
+			--text-secondary: #9ca3a0;
 		}
 
 		body {
 			font-family: 'Rajdhani', sans-serif;
-			background: #0a0e1a;
+			background: #0d1211;
 			color: var(--text-primary);
 			overflow-x: hidden;
 			min-height: 100vh;
@@ -59,8 +67,8 @@
 			width: 100%;
 			height: 100%;
 			background-image:
-				linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px),
-				linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px);
+				linear-gradient(rgba(72, 239, 160, 0.008) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(72, 239, 160, 0.008) 1px, transparent 1px);
 			background-size: 50px 50px;
 			pointer-events: none;
 			z-index: 1;
@@ -73,9 +81,9 @@
 			top: 0;
 			width: 50px;
 			height: 100vh;
-			background: rgba(10, 14, 26, 0.95);
+			background: rgba(13, 18, 17, 0.95);
 			backdrop-filter: blur(20px);
-			border-right: 1px solid rgba(0, 255, 136, 0.15);
+			border-right: 1px solid rgba(72, 239, 160, 0.08);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -90,32 +98,48 @@
 		}
 
 		.nav-toggle {
-			position: fixed;
-			left: 50px;
-			top: 20px;
-			width: 30px;
-			height: 30px;
-			background: rgba(10, 14, 26, 0.95);
-			backdrop-filter: blur(20px);
-			border: 1px solid rgba(0, 255, 136, 0.3);
-			border-radius: 8px;
+			width: 40px;
+			height: 40px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			cursor: pointer;
-			z-index: 11;
 			transition: all 0.3s ease;
-			font-size: 16px;
+			border-radius: 8px;
+			margin-bottom: 5px;
 		}
 
 		.nav-toggle:hover {
-			background: rgba(0, 255, 136, 0.15);
-			border-color: rgba(0, 255, 136, 0.5);
-			box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+			background: rgba(72, 239, 160, 0.08);
 		}
 
-		.nav-sidebar.hidden ~ .nav-toggle {
-			left: 0;
+		.hamburger {
+			width: 22px;
+			height: 16px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			transition: transform 0.3s ease;
+		}
+
+		.hamburger span {
+			width: 100%;
+			height: 2px;
+			background: var(--primary-green);
+			border-radius: 2px;
+			transition: all 0.3s ease;
+		}
+
+		.nav-sidebar.hidden .hamburger span:nth-child(1) {
+			transform: translateY(7px) rotate(45deg);
+		}
+
+		.nav-sidebar.hidden .hamburger span:nth-child(2) {
+			opacity: 0;
+		}
+
+		.nav-sidebar.hidden .hamburger span:nth-child(3) {
+			transform: translateY(-7px) rotate(-45deg);
 		}
 
 		.nav-item {
@@ -134,16 +158,16 @@
 		}
 
 		.nav-item:hover {
-			background: rgba(0, 255, 136, 0.15);
-			border-color: rgba(0, 255, 136, 0.3);
+			background: rgba(72, 239, 160, 0.08);
+			border-color: rgba(72, 239, 160, 0.3);
 			transform: scale(1.1);
-			box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+			box-shadow: 0 0 20px rgba(72, 239, 160, 0.3);
 		}
 
 		.nav-item.active {
-			background: rgba(0, 255, 136, 0.2);
-			border-color: rgba(0, 255, 136, 0.5);
-			box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+			background: rgba(72, 239, 160, 0.1);
+			border-color: rgba(72, 239, 160, 0.5);
+			box-shadow: 0 0 25px rgba(72, 239, 160, 0.4);
 		}
 
 		/* Main Layout Container */
@@ -170,9 +194,9 @@
 
 		/* Sidebar Styling */
 		.sidebar {
-			background: rgba(10, 14, 26, 0.75);
+			background: rgba(13, 18, 17, 0.75);
 			backdrop-filter: blur(20px);
-			border-right: 1px solid rgba(0, 255, 136, 0.1);
+			border-right: 1px solid rgba(72, 239, 160, 0.1);
 			padding: 30px 15px;
 			overflow-y: auto;
 			overflow-x: hidden;
@@ -196,7 +220,7 @@
 			text-transform: uppercase;
 			letter-spacing: 4px;
 			margin-bottom: 20px;
-			text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+			text-shadow: 0 0 20px rgba(72, 239, 160, 0.4);
 		}
 
 		/* XP Section */
@@ -216,7 +240,7 @@
 			align-items: center;
 			justify-content: center;
 			font-size: 28px;
-			box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+			box-shadow: 0 0 25px rgba(72, 239, 160, 0.5);
 		}
 
 		.xp-info {
@@ -295,7 +319,7 @@
 		.stat-icon {
 			width: 36px;
 			height: 36px;
-			background: rgba(0, 255, 136, 0.15);
+			background: rgba(72, 239, 160, 0.08);
 			border-radius: 8px;
 			display: flex;
 			align-items: center;
@@ -332,7 +356,7 @@
 		}
 
 		.stat-fill.magic { background: linear-gradient(90deg, #a855f7, #ec4899); }
-		.stat-fill.shield { background: linear-gradient(90deg, #00ffff, #00ff88); }
+		.stat-fill.shield { background: linear-gradient(90deg, #00ffff, #48EFA0); }
 		.stat-fill.health { background: linear-gradient(90deg, #ff6b35, #fbbf24); }
 
 		.stat-fill::after {
@@ -357,7 +381,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05), transparent 70%);
+			background: radial-gradient(circle at center, rgba(72, 239, 160, 0.02), transparent 70%);
 		}
 
 		#character-canvas {
@@ -387,9 +411,9 @@
 
 		/* Right Progress Panel */
 		.progress-panel {
-			background: rgba(10, 14, 26, 0.75);
+			background: rgba(13, 18, 17, 0.75);
 			backdrop-filter: blur(20px);
-			border-left: 1px solid rgba(0, 255, 136, 0.1);
+			border-left: 1px solid rgba(72, 239, 160, 0.1);
 			padding: 30px 15px;
 			overflow-y: auto;
 			overflow-x: hidden;
@@ -413,8 +437,8 @@
 
 		.resource-box {
 			flex: 1;
-			background: rgba(0, 255, 136, 0.1);
-			border: 1px solid rgba(0, 255, 136, 0.3);
+			background: rgba(72, 239, 160, 0.1);
+			border: 1px solid rgba(72, 239, 160, 0.3);
 			border-radius: 12px;
 			padding: 12px;
 			text-align: center;
@@ -450,7 +474,7 @@
 			letter-spacing: 1.5px;
 			margin-bottom: 25px;
 			color: var(--primary-green);
-			text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+			text-shadow: 0 0 15px rgba(72, 239, 160, 0.3);
 			word-wrap: break-word;
 		}
 
@@ -483,7 +507,7 @@
 			font-size: 12px;
 			font-weight: 700;
 			color: var(--primary-green);
-			background: rgba(0, 255, 136, 0.15);
+			background: rgba(72, 239, 160, 0.08);
 			padding: 3px 10px;
 			border-radius: 8px;
 		}
@@ -495,7 +519,7 @@
 			border-radius: 5px;
 			overflow: hidden;
 			position: relative;
-			border: 1px solid rgba(0, 255, 136, 0.2);
+			border: 1px solid rgba(72, 239, 160, 0.1);
 		}
 
 		.skill-fill {
@@ -504,7 +528,7 @@
 			border-radius: 5px;
 			position: relative;
 			transition: width 1.2s ease;
-			box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+			box-shadow: 0 0 10px rgba(72, 239, 160, 0.5);
 		}
 
 		.skill-fill::after {
@@ -588,8 +612,9 @@
 			min-height: 100vh;
 			position: relative;
 			z-index: 2;
-			padding: 60px 40px;
-			max-width: calc(100% - 450px);
+			padding: 60px 80px;
+			max-width: 1400px;
+			margin: 0 auto;
 		}
 
 		.dashboard.sidebar-hidden {
@@ -597,9 +622,9 @@
 		}
 
 		.section-content {
-			background: rgba(10, 14, 26, 0.85);
+			background: rgba(13, 18, 17, 0.85);
 			backdrop-filter: blur(20px);
-			border: 1px solid rgba(0, 255, 136, 0.15);
+			border: 1px solid rgba(72, 239, 160, 0.08);
 			border-radius: 20px;
 			padding: 40px;
 		}
@@ -612,12 +637,12 @@
 			text-transform: uppercase;
 			letter-spacing: 4px;
 			margin-bottom: 30px;
-			text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+			text-shadow: 0 0 20px rgba(72, 239, 160, 0.4);
 		}
 
 		.experience-item, .project-item {
-			background: rgba(21, 27, 45, 0.6);
-			border: 1px solid rgba(0, 255, 136, 0.1);
+			background: rgba(26, 31, 30, 0.6);
+			border: 1px solid rgba(72, 239, 160, 0.1);
 			border-radius: 15px;
 			padding: 25px;
 			margin-bottom: 25px;
@@ -625,9 +650,9 @@
 		}
 
 		.experience-item:hover, .project-item:hover {
-			border-color: rgba(0, 255, 136, 0.4);
+			border-color: rgba(72, 239, 160, 0.4);
 			transform: translateX(5px);
-			box-shadow: 0 5px 25px rgba(0, 255, 136, 0.2);
+			box-shadow: 0 5px 25px rgba(72, 239, 160, 0.1);
 		}
 
 		.item-header {
@@ -680,38 +705,13 @@
 		}
 
 		.tag {
-			background: rgba(0, 255, 136, 0.15);
-			border: 1px solid rgba(0, 255, 136, 0.3);
+			background: rgba(72, 239, 160, 0.08);
+			border: 1px solid rgba(72, 239, 160, 0.3);
 			border-radius: 8px;
 			padding: 5px 12px;
 			font-size: 12px;
 			color: var(--primary-green);
 			font-weight: 600;
-		}
-
-		.shared-character-container {
-			position: fixed;
-			right: 40px;
-			top: 50%;
-			transform: translateY(-50%);
-			width: 400px;
-			height: 600px;
-			background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05), transparent 70%);
-			border-radius: 20px;
-			border: 1px solid rgba(0, 255, 136, 0.1);
-			z-index: 3;
-			opacity: 0;
-			visibility: hidden;
-			pointer-events: none;
-			display: none;
-			transition: opacity 0.5s ease;
-		}
-
-		.shared-character-container.visible {
-			opacity: 1;
-			visibility: visible;
-			pointer-events: auto;
-			display: block;
 		}
 
 		/* Responsive */
@@ -721,14 +721,8 @@
 			}
 
 			.content-section {
-				max-width: calc(100% - 380px);
+				max-width: 100%;
 				padding: 50px 25px;
-			}
-
-			.shared-character-container {
-				width: 350px;
-				height: 550px;
-				right: 30px;
 			}
 		}
 
@@ -740,13 +734,18 @@
 				left: 0;
 				top: auto;
 				width: 100%;
-				height: 70px;
+				height: 60px;
 				flex-direction: row;
-				justify-content: space-around;
+				justify-content: center;
+				align-items: center;
+				gap: 15px;
 				border-right: none;
-				border-top: 1px solid rgba(0, 255, 136, 0.15);
-				padding: 0 10px;
+				border-top: 1px solid rgba(72, 239, 160, 0.08);
+				padding: 0 20px;
 				transform: translateX(0) !important;
+				background: rgba(13, 18, 17, 0.98);
+				backdrop-filter: blur(20px);
+				z-index: 100;
 			}
 
 			.nav-sidebar.hidden {
@@ -757,6 +756,17 @@
 				display: none;
 			}
 
+			.nav-item {
+				width: 50px;
+				height: 50px;
+				font-size: 24px;
+				border-radius: 12px;
+			}
+
+			.nav-item.active {
+				background: rgba(72, 239, 160, 0.1);
+			}
+
 			.dashboard {
 				grid-template-columns: 1fr;
 				grid-template-rows: 50vh auto auto;
@@ -764,27 +774,28 @@
 				gap: 0;
 				min-height: 100vh;
 				margin-left: 0;
-				padding-bottom: 70px;
+				padding-bottom: 60px;
 			}
 
 			.sidebar {
 				order: 2;
 				border-right: none;
-				border-top: 1px solid rgba(0, 255, 136, 0.1);
-				padding: 25px 20px;
+				border-top: 1px solid rgba(72, 239, 160, 0.1);
+				padding: 30px 20px;
 			}
 
 			.progress-panel {
 				order: 3;
 				border-left: none;
-				border-top: 1px solid rgba(0, 255, 136, 0.1);
-				padding: 25px 20px;
+				border-top: 1px solid rgba(72, 239, 160, 0.1);
+				padding: 30px 20px;
 			}
 
 			.character-container {
 				order: 1;
 				height: 50vh;
 				position: relative;
+				padding-bottom: 20px;
 			}
 
 			.character-name {
@@ -820,15 +831,13 @@
 
 			.sections-wrapper {
 				margin-left: 0;
+				padding-bottom: 0;
 			}
 
 			.content-section {
 				max-width: 100%;
-				padding: 40px 20px 90px 20px;
-			}
-
-			.shared-character-container {
-				display: none;
+				padding: 40px 20px 80px 20px;
+				min-height: auto;
 			}
 
 			.section-title {
@@ -841,14 +850,36 @@
 		}
 
 		@media (max-width: 480px) {
+			.nav-sidebar {
+				height: 55px;
+				padding: 0 10px;
+				gap: 10px;
+			}
+
+			.nav-item {
+				width: 45px;
+				height: 45px;
+				font-size: 22px;
+				border-radius: 10px;
+			}
+
 			.dashboard {
 				grid-template-rows: 45vh auto auto;
 				padding: 0;
 				gap: 0;
+				padding-bottom: 55px;
 			}
 
 			.character-container {
 				height: 45vh;
+			}
+
+			.content-section {
+				padding: 30px 15px 70px 15px;
+			}
+
+			.section-title {
+				font-size: 32px;
 			}
 
 			.character-name {
@@ -924,7 +955,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: #0a0e1a;
+			background: #0d1211;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -941,7 +972,7 @@
 		.loading-spinner {
 			width: 60px;
 			height: 60px;
-			border: 4px solid rgba(0, 255, 136, 0.1);
+			border: 4px solid rgba(72, 239, 160, 0.1);
 			border-top-color: var(--primary-green);
 			border-radius: 50%;
 			animation: spin 1s linear infinite;
@@ -973,13 +1004,17 @@
 
 	<!-- Navigation Sidebar -->
 	<nav class="nav-sidebar">
+		<div class="nav-toggle" title="Toggle Navigation">
+			<div class="hamburger">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
 		<a href="#home" class="nav-item active" data-section="home" title="Home">🏠</a>
 		<a href="#experience" class="nav-item" data-section="experience" title="Experience">💼</a>
 		<a href="#projects" class="nav-item" data-section="projects" title="Projects">📱</a>
 	</nav>
-
-	<!-- Toggle Sidebar Button -->
-	<div class="nav-toggle" title="Toggle Navigation">◀</div>
 
 	<!-- Main Dashboard Layout -->
 	<div class="dashboard">
@@ -988,27 +1023,27 @@
 			<div class="character-name">MARTIN</div>
 
 			<div class="xp-section">
-				<div class="xp-badge">🤖</div>
+				<div class="xp-badge">📊</div>
 				<div class="xp-info">
-					<div class="xp-label">AI Automation Engineer</div>
-					<div class="xp-value">1.5 <span style="font-size: 16px;">Years</span></div>
+					<div class="xp-label">IT Service Monitoring</div>
+					<div class="xp-value">1.5+ <span style="font-size: 16px;">Years</span></div>
 					<div class="xp-subtext">GPA 3.9/4.0 • AWS Certified</div>
 				</div>
 			</div>
 
 			<div class="trophy-section">
-				<div class="trophy-icon">👥</div>
+				<div class="trophy-icon">🏦</div>
 				<div class="trophy-info">
-					<div class="trophy-label">Users Protected</div>
-					<div class="trophy-value">2M+</div>
+					<div class="trophy-label">Banking Services</div>
+					<div class="trophy-value">BTPN Syariah</div>
 				</div>
 			</div>
 
 			<div class="stats-section">
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon">🐍</div>
-						<div class="stat-name">Python Mastery</div>
+						<div class="stat-icon">📊</div>
+						<div class="stat-name">Grafana & Monitoring</div>
 					</div>
 					<div class="stat-bar">
 						<div class="stat-fill" style="width: 95%"></div>
@@ -1017,18 +1052,18 @@
 
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon magic">📱</div>
-						<div class="stat-name">Appium Expert</div>
+						<div class="stat-icon magic">🐍</div>
+						<div class="stat-name">Python & Automation</div>
 					</div>
 					<div class="stat-bar">
-						<div class="stat-fill magic" style="width: 95%"></div>
+						<div class="stat-fill magic" style="width: 90%"></div>
 					</div>
 				</div>
 
 				<div class="stat-item">
 					<div class="stat-header">
-						<div class="stat-icon shield">🔄</div>
-						<div class="stat-name">N8N Workflows</div>
+						<div class="stat-icon shield">📱</div>
+						<div class="stat-name">Appium & Selenium</div>
 					</div>
 					<div class="stat-bar">
 						<div class="stat-fill shield" style="width: 90%"></div>
@@ -1038,10 +1073,10 @@
 				<div class="stat-item">
 					<div class="stat-header">
 						<div class="stat-icon health">☁️</div>
-						<div class="stat-name">AWS Cloud</div>
+						<div class="stat-name">AWS & Cloud</div>
 					</div>
 					<div class="stat-bar">
-						<div class="stat-fill health" style="width: 80%"></div>
+						<div class="stat-fill health" style="width: 85%"></div>
 					</div>
 				</div>
 			</div>
@@ -1072,7 +1107,7 @@
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">Test Automation</div>
+					<div class="skill-name">Grafana & Tableau</div>
 					<div class="skill-level">EXPERT</div>
 				</div>
 				<div class="skill-bar">
@@ -1082,7 +1117,7 @@
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">Synthetic Monitoring</div>
+					<div class="skill-name">Appium & Selenium</div>
 					<div class="skill-level">EXPERT</div>
 				</div>
 				<div class="skill-bar">
@@ -1092,17 +1127,7 @@
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">Python Development</div>
-					<div class="skill-level">EXPERT</div>
-				</div>
-				<div class="skill-bar">
-					<div class="skill-fill" style="width: 95%"></div>
-				</div>
-			</div>
-
-			<div class="skill-progress">
-				<div class="skill-header">
-					<div class="skill-name">Workflow Automation</div>
+					<div class="skill-name">Python & Node.js</div>
 					<div class="skill-level">EXPERT</div>
 				</div>
 				<div class="skill-bar">
@@ -1112,17 +1137,17 @@
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">JavaScript</div>
-					<div class="skill-level">ADV</div>
+					<div class="skill-name">AWS & Azure</div>
+					<div class="skill-level">EXPERT</div>
 				</div>
 				<div class="skill-bar">
-					<div class="skill-fill" style="width: 80%"></div>
+					<div class="skill-fill" style="width: 85%"></div>
 				</div>
 			</div>
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">MySQL/Database</div>
+					<div class="skill-name">MySQL & MongoDB</div>
 					<div class="skill-level">ADV</div>
 				</div>
 				<div class="skill-bar">
@@ -1132,11 +1157,21 @@
 
 			<div class="skill-progress">
 				<div class="skill-header">
-					<div class="skill-name">Docker/DevOps</div>
+					<div class="skill-name">Power Automate</div>
 					<div class="skill-level">ADV</div>
 				</div>
 				<div class="skill-bar">
-					<div class="skill-fill" style="width: 75%"></div>
+					<div class="skill-fill" style="width: 80%"></div>
+				</div>
+			</div>
+
+			<div class="skill-progress">
+				<div class="skill-header">
+					<div class="skill-name">WhatsApp & Teams API</div>
+					<div class="skill-level">ADV</div>
+				</div>
+				<div class="skill-bar">
+					<div class="skill-fill" style="width: 85%"></div>
 				</div>
 			</div>
 
@@ -1166,10 +1201,6 @@
 	</div>
 
 	<!-- Shared Character Container -->
-	<div class="shared-character-container">
-		<canvas id="section-canvas"></canvas>
-	</div>
-
 	<!-- Sections Wrapper -->
 	<div class="sections-wrapper">
 		<!-- Experience Section -->
@@ -1179,46 +1210,68 @@
 
 				<div class="experience-item">
 					<div class="item-header">
-						<div class="item-icon">🏦</div>
+						<div class="item-icon">📊</div>
 						<div class="item-title">
-							<h3>AI Automation Engineer</h3>
+							<h3>IT Service Monitoring</h3>
 							<div class="item-meta">
-								<span>📍 Fintech Banking</span>
-								<span>⏱️ 1.5 Years</span>
+								<span>📍 JEDI Solutions - BTPN Syariah</span>
+								<span>⏱️ May 2024 - Present</span>
 							</div>
 						</div>
 					</div>
 					<div class="item-description">
-						Engineered synthetic monitoring system protecting 2M+ daily active users across critical banking journeys. Built automated health checks running 500+ daily tests, providing 30+ minute advance warning for production issues.
+						Managed critical incidents across e-channel services (mobile banking, internet banking, ATM). Triaged and resolved production issues in collaboration with cross-functional teams. Generated weekly and monthly performance reports and recommended process improvements.
 					</div>
 					<div class="item-tags">
-						<span class="tag">Python</span>
-						<span class="tag">Appium</span>
-						<span class="tag">Synthetic Monitoring</span>
-						<span class="tag">Banking Automation</span>
+						<span class="tag">Grafana</span>
+						<span class="tag">Incident Management</span>
+						<span class="tag">E-Channel Services</span>
+						<span class="tag">Performance Reports</span>
 						<span class="tag">Production Support</span>
 					</div>
 				</div>
 
 				<div class="experience-item">
 					<div class="item-header">
-						<div class="item-icon">🎓</div>
+						<div class="item-icon">🛠️</div>
 						<div class="item-title">
-							<h3>Research Assistant</h3>
+							<h3>IT Production Support</h3>
 							<div class="item-meta">
-								<span>📍 University of Indonesia</span>
-								<span>⏱️ 1 Year</span>
+								<span>📍 JEDI Solutions - BTPN Syariah</span>
+								<span>⏱️ Nov 2023 - April 2024</span>
 							</div>
 						</div>
 					</div>
 					<div class="item-description">
-						Developed machine learning models for sentiment analysis research. Implemented NLP pipelines and contributed to academic publications in AI/ML domain.
+						Resolved critical issues in e-channel systems (mobile banking, internet banking, ATM) to maintain high availability and user satisfaction. Managed incident tickets and produced weekly/monthly performance reports, leveraging insights to optimize digital services.
 					</div>
 					<div class="item-tags">
-						<span class="tag">Machine Learning</span>
-						<span class="tag">NLP</span>
-						<span class="tag">Python</span>
-						<span class="tag">Research</span>
+						<span class="tag">Incident Resolution</span>
+						<span class="tag">E-Channel Systems</span>
+						<span class="tag">Performance Analysis</span>
+						<span class="tag">High Availability</span>
+					</div>
+				</div>
+
+				<div class="experience-item">
+					<div class="item-header">
+						<div class="item-icon">💻</div>
+						<div class="item-title">
+							<h3>Web Developer</h3>
+							<div class="item-meta">
+								<span>📍 Grujugan Village Government</span>
+								<span>⏱️ April 2022 - August 2022</span>
+							</div>
+						</div>
+					</div>
+					<div class="item-description">
+						Developed a social assistance website using Laravel and MySQL, improving data accessibility and management for local governance.
+					</div>
+					<div class="item-tags">
+						<span class="tag">Laravel</span>
+						<span class="tag">MySQL</span>
+						<span class="tag">PHP</span>
+						<span class="tag">Web Development</span>
 					</div>
 				</div>
 			</div>
@@ -1231,46 +1284,47 @@
 
 				<div class="project-item">
 					<div class="item-header">
-						<div class="item-icon">🔍</div>
+						<div class="item-icon">📱</div>
 						<div class="item-title">
-							<h3>Banking Automation Monitor</h3>
+							<h3>Synthetic Monitoring Mobile and Web Apps</h3>
 							<div class="item-meta">
 								<span>⭐ Production System</span>
-								<span>👥 2M+ Users</span>
+								<span>📍 Jakarta, 2024</span>
 							</div>
 						</div>
 					</div>
 					<div class="item-description">
-						Enterprise-grade synthetic monitoring system for critical banking journeys. Automated 15+ critical user flows with 500+ daily health checks. Integrated with alerting systems for 30+ minute advance warning.
+						Built synthetic monitoring for BTPN Syariah's mobile and web applications, enabling proactive issue detection and resolution to enhance digital reliability.
 					</div>
 					<div class="item-tags">
 						<span class="tag">Python</span>
 						<span class="tag">Appium</span>
 						<span class="tag">Selenium</span>
-						<span class="tag">MySQL</span>
-						<span class="tag">Docker</span>
+						<span class="tag">Synthetic Monitoring</span>
+						<span class="tag">Grafana</span>
 					</div>
 				</div>
 
 				<div class="project-item">
 					<div class="item-header">
-						<div class="item-icon">🔄</div>
+						<div class="item-icon">🔔</div>
 						<div class="item-title">
-							<h3>N8N AI Workflows</h3>
+							<h3>Escalation Alerting Systems</h3>
 							<div class="item-meta">
-								<span>⭐ Open Source</span>
-								<span>🤖 AI-Powered</span>
+								<span>⭐ Production System</span>
+								<span>📍 Jakarta, 2024</span>
 							</div>
 						</div>
 					</div>
 					<div class="item-description">
-						Collection of AI-powered automation workflows built with N8N. Includes document processing, data enrichment, and intelligent notification systems integrated with multiple APIs.
+						Designed a Python and Node.js-based alerting system, integrating real-time notifications via WhatsApp and Teams, improving team response efficiency.
 					</div>
 					<div class="item-tags">
-						<span class="tag">N8N</span>
-						<span class="tag">AI Integration</span>
-						<span class="tag">APIs</span>
-						<span class="tag">Automation</span>
+						<span class="tag">Python</span>
+						<span class="tag">Node.js</span>
+						<span class="tag">WhatsApp API</span>
+						<span class="tag">Microsoft Teams</span>
+						<span class="tag">Real-time Alerts</span>
 					</div>
 				</div>
 
@@ -1278,21 +1332,22 @@
 					<div class="item-header">
 						<div class="item-icon">💬</div>
 						<div class="item-title">
-							<h3>Sentiment Analysis System</h3>
+							<h3>Sentiment Analysis - Kanjuruhan Tragedy</h3>
 							<div class="item-meta">
 								<span>⭐ Research Project</span>
-								<span>📊 NLP</span>
+								<span>📍 Purwokerto, 2023</span>
 							</div>
 						</div>
 					</div>
 					<div class="item-description">
-						Machine learning system for social media sentiment analysis. Implemented BERT-based models achieving high accuracy on Indonesian language text classification.
+						Analyzed public sentiment on the Kanjuruhan Tragedy using SVM, achieving 81.54% accuracy, demonstrating strong data science capabilities. Published in SINTA 2 journal.
 					</div>
 					<div class="item-tags">
 						<span class="tag">Machine Learning</span>
-						<span class="tag">BERT</span>
+						<span class="tag">SVM</span>
 						<span class="tag">NLP</span>
 						<span class="tag">Python</span>
+						<span class="tag">Sentiment Analysis</span>
 					</div>
 				</div>
 			</div>
@@ -1320,7 +1375,7 @@
 		particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
 		const particleMaterial = new THREE.PointsMaterial({
-			color: 0x00ff88,
+			color: 0x48EFA0,
 			size: 0.8,
 			transparent: true,
 			opacity: 0.6,
@@ -1364,7 +1419,7 @@
 		const hemisphereLight = new THREE.HemisphereLight(0x00ffff, 0xff6b35, 0.6);
 		charScene.add(hemisphereLight);
 
-		const directionalLight = new THREE.DirectionalLight(0x00ff88, 1.2);
+		const directionalLight = new THREE.DirectionalLight(0x48EFA0, 1.2);
 		directionalLight.position.set(5, 10, 7.5);
 		directionalLight.castShadow = true;
 		charScene.add(directionalLight);
@@ -1417,7 +1472,7 @@
 
 						// Add emissive glow effect
 						if (child.material) {
-							child.material.emissive = new THREE.Color(0x00ff88);
+							child.material.emissive = new THREE.Color(0x48EFA0);
 							child.material.emissiveIntensity = 0.2;
 						}
 					}
@@ -1445,7 +1500,7 @@
 				// Add wireframe overlay
 				const wireframeGeometry = new THREE.IcosahedronGeometry(3, 1);
 				const wireframeMaterial = new THREE.MeshBasicMaterial({
-					color: 0x00ff88,
+					color: 0x48EFA0,
 					wireframe: true,
 					transparent: true,
 					opacity: 0.1
@@ -1669,137 +1724,6 @@
 			}
 		});
 
-		// ===== SHARED SECTION CHARACTER =====
-		let sharedCharacter = null;
-		let sharedMixer = null;
-		let sharedAnimations = [];
-		let currentSectionAnimation = null;
-
-		function initSharedCharacter() {
-			const canvas = document.getElementById('section-canvas');
-			const container = document.querySelector('.shared-character-container');
-			if (!canvas || !container || window.innerWidth <= 968) return;
-
-			const scene = new THREE.Scene();
-			const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-			const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-
-			function resizeCanvas() {
-				const width = container.offsetWidth;
-				const height = container.offsetHeight;
-				camera.aspect = width / height;
-				camera.updateProjectionMatrix();
-				renderer.setSize(width, height);
-				renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-			}
-			resizeCanvas();
-
-			// Lighting
-			const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-			scene.add(ambientLight);
-			const directionalLight = new THREE.DirectionalLight(0x00ff88, 1.2);
-			directionalLight.position.set(5, 10, 7.5);
-			scene.add(directionalLight);
-
-			camera.position.set(0, 0.3, 3.5);
-			camera.lookAt(0, 0.3, 0);
-
-			// Load character model
-			const loader = new THREE.GLTFLoader();
-			const sectionClock = new THREE.Clock();
-
-			loader.load(modelURL, function (gltf) {
-				sharedCharacter = gltf.scene;
-				sharedCharacter.scale.set(0.4, 0.4, 0.4);
-				sharedCharacter.position.y = -0.5;
-
-				sharedCharacter.traverse((child) => {
-					if (child.isMesh && child.material) {
-						child.material.emissive = new THREE.Color(0x00ff88);
-						child.material.emissiveIntensity = 0.2;
-					}
-				});
-
-				scene.add(sharedCharacter);
-
-				// Setup animations
-				if (gltf.animations && gltf.animations.length > 0) {
-					sharedMixer = new THREE.AnimationMixer(sharedCharacter);
-					sharedAnimations = gltf.animations;
-
-					// Play idle animation by default
-					const idleAnimation = sharedAnimations.find(anim => anim.name.toLowerCase().includes('idle'));
-					if (idleAnimation) {
-						const action = sharedMixer.clipAction(idleAnimation);
-						action.play();
-						currentSectionAnimation = 'idle';
-					}
-				}
-			});
-
-			// Animation loop
-			function animate() {
-				requestAnimationFrame(animate);
-				const delta = sectionClock.getDelta();
-				if (sharedMixer) sharedMixer.update(delta);
-				renderer.render(scene, camera);
-			}
-			animate();
-
-			// Resize handler
-			window.addEventListener('resize', () => {
-				if (window.innerWidth > 968) {
-					resizeCanvas();
-				}
-			});
-		}
-
-		// Play specific animation based on section
-		function playSectionAnimation(sectionName) {
-			if (!sharedMixer || !sharedAnimations.length) return;
-
-			let targetAnimation = null;
-
-			// Select animation based on section
-			if (sectionName === 'experience') {
-				// Play wave or thumbs up animation for experience
-				targetAnimation = sharedAnimations.find(anim =>
-					anim.name.toLowerCase().includes('wave') ||
-					anim.name.toLowerCase().includes('yes')
-				);
-			} else if (sectionName === 'projects') {
-				// Play dance or jump animation for projects
-				targetAnimation = sharedAnimations.find(anim =>
-					anim.name.toLowerCase().includes('jump') ||
-					anim.name.toLowerCase().includes('dance')
-				);
-			}
-
-			// If no specific animation found, use idle
-			if (!targetAnimation) {
-				targetAnimation = sharedAnimations.find(anim => anim.name.toLowerCase().includes('idle'));
-			}
-
-			// Only change if different from current
-			if (targetAnimation && targetAnimation.name !== currentSectionAnimation) {
-				sharedMixer.stopAllAction();
-				const action = sharedMixer.clipAction(targetAnimation);
-				action.reset();
-				action.play();
-				currentSectionAnimation = targetAnimation.name;
-			}
-		}
-
-		// Ensure character is hidden on page load
-		const sharedCharContainer = document.querySelector('.shared-character-container');
-		if (sharedCharContainer) {
-			sharedCharContainer.classList.remove('visible');
-		}
-
-		setTimeout(() => {
-			initSharedCharacter();
-		}, 1000);
-
 		// ===== NAVIGATION =====
 		const navItems = document.querySelectorAll('.nav-item');
 		const navSidebar = document.querySelector('.nav-sidebar');
@@ -1808,7 +1732,6 @@
 		// Toggle sidebar visibility
 		navToggle.addEventListener('click', () => {
 			const isHidden = navSidebar.classList.toggle('hidden');
-			navToggle.textContent = isHidden ? '▶' : '◀';
 
 			// Toggle margin on dashboard and sections wrapper
 			const dashboard = document.querySelector('.dashboard');
@@ -1847,109 +1770,49 @@
 			});
 		});
 
-		// ===== INTERSECTION OBSERVER FOR SECTIONS =====
-		let currentActiveSection = null;
-		let isInExperienceOrProjects = false;
+		// ===== SCROLL-BASED NAVIGATION =====
+		function updateActiveNav() {
+			const scrollY = window.scrollY;
+			const windowHeight = window.innerHeight;
 
-		// Create Intersection Observer for better section detection
-		const observerOptions = {
-			root: null,
-			rootMargin: '-20% 0px -20% 0px', // Only trigger when section is well into viewport
-			threshold: [0, 0.3, 0.5, 0.7, 1]
-		};
+			const experienceSection = document.getElementById('experience');
+			const projectsSection = document.getElementById('projects');
 
-		const sectionObserver = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				const sectionId = entry.target.id;
+			if (!experienceSection || !projectsSection) return;
 
-				// Check if section is significantly visible (at least 50% in viewport)
-				if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-					// Update navigation
-					const navSection = sectionId === 'home-section' ? 'home' : sectionId;
-					navItems.forEach(nav => {
-						nav.classList.remove('active');
-						if (nav.getAttribute('data-section') === navSection) {
-							nav.classList.add('active');
-						}
-					});
+			const expRect = experienceSection.getBoundingClientRect();
+			const projRect = projectsSection.getBoundingClientRect();
 
-					// Handle character visibility and animation
-					if (sharedCharContainer) {
-						if (sectionId === 'experience' || sectionId === 'projects') {
-							isInExperienceOrProjects = true;
-							sharedCharContainer.classList.add('visible');
+			const expInView = expRect.top < windowHeight * 0.5 && expRect.bottom > windowHeight * 0.5;
+			const projInView = projRect.top < windowHeight * 0.5 && projRect.bottom > windowHeight * 0.5;
 
-							// Trigger animation change if section changed
-							if (currentActiveSection !== sectionId) {
-								playSectionAnimation(sectionId);
-								currentActiveSection = sectionId;
-							}
-						} else if (sectionId === 'home-section') {
-							// Explicitly hide character when home section is visible
-							isInExperienceOrProjects = false;
-							sharedCharContainer.classList.remove('visible');
-							currentActiveSection = null;
-						}
+			if (scrollY < 200) {
+				navItems.forEach(nav => {
+					nav.classList.remove('active');
+					if (nav.getAttribute('data-section') === 'home') {
+						nav.classList.add('active');
 					}
-				}
-				// When section is leaving viewport
-				else if (!entry.isIntersecting && entry.intersectionRatio < 0.1) {
-					// If experience/projects is leaving, check if we should hide character
-					if (sectionId === 'experience' || sectionId === 'projects') {
-						// Only hide if both sections are not visible
-						setTimeout(() => {
-							const expVisible = document.getElementById('experience')?.getBoundingClientRect();
-							const projVisible = document.getElementById('projects')?.getBoundingClientRect();
-
-							const expInView = expVisible && expVisible.top < window.innerHeight * 0.8 && expVisible.bottom > window.innerHeight * 0.2;
-							const projInView = projVisible && projVisible.top < window.innerHeight * 0.8 && projVisible.bottom > window.innerHeight * 0.2;
-
-							if (!expInView && !projInView && sharedCharContainer) {
-								sharedCharContainer.classList.remove('visible');
-								currentActiveSection = null;
-								isInExperienceOrProjects = false;
-							}
-						}, 100);
+				});
+			} else if (projInView) {
+				navItems.forEach(nav => {
+					nav.classList.remove('active');
+					if (nav.getAttribute('data-section') === 'projects') {
+						nav.classList.add('active');
 					}
-				}
-			});
-		}, observerOptions);
-
-		// Observe all sections
-		const sectionsToObserve = document.querySelectorAll('#experience, #projects');
-		const dashboardSection = document.querySelector('.dashboard');
-
-		sectionsToObserve.forEach(section => {
-			sectionObserver.observe(section);
-		});
-
-		// Observe dashboard as "home" section
-		if (dashboardSection) {
-			dashboardSection.id = 'home-section';
-			sectionObserver.observe(dashboardSection);
+				});
+			} else if (expInView) {
+				navItems.forEach(nav => {
+					nav.classList.remove('active');
+					if (nav.getAttribute('data-section') === 'experience') {
+						nav.classList.add('active');
+					}
+				});
+			}
 		}
 
-		// Failsafe: Simple scroll listener to ensure character hidden at top
-		let scrollTimeout;
-		window.addEventListener('scroll', () => {
-			clearTimeout(scrollTimeout);
-			scrollTimeout = setTimeout(() => {
-				if (window.scrollY < 50 && sharedCharContainer) {
-					sharedCharContainer.classList.remove('visible');
-					currentActiveSection = null;
-					isInExperienceOrProjects = false;
-				}
-			}, 50);
-		}, { passive: true });
-
-		// Ensure character is hidden on initial page load
-		window.addEventListener('load', () => {
-			if (sharedCharContainer) {
-				sharedCharContainer.classList.remove('visible');
-				currentActiveSection = null;
-				isInExperienceOrProjects = false;
-			}
-		});
+		// Scroll listener
+		window.addEventListener('scroll', updateActiveNav, { passive: true });
+		window.addEventListener('load', updateActiveNav);
 	</script>
 </body>
 </html>
