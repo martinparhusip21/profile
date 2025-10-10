@@ -1790,6 +1790,12 @@
 			}
 		}
 
+		// Ensure character is hidden on page load
+		const sharedCharContainer = document.querySelector('.shared-character-container');
+		if (sharedCharContainer) {
+			sharedCharContainer.classList.remove('visible');
+		}
+
 		setTimeout(() => {
 			initSharedCharacter();
 		}, 1000);
@@ -1841,11 +1847,12 @@
 
 		// Update active nav on scroll and manage shared character
 		let currentActiveSection = null;
-		const sharedCharContainer = document.querySelector('.shared-character-container');
 
 		window.addEventListener('scroll', () => {
 			const sections = ['home', 'experience', 'projects'];
 			const scrollPosition = window.scrollY + 200;
+			const actualScrollY = window.scrollY;
+			let sectionFound = false;
 
 			sections.forEach(sectionId => {
 				const section = document.getElementById(sectionId);
@@ -1854,6 +1861,8 @@
 					const sectionHeight = section.offsetHeight;
 
 					if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+						sectionFound = true;
+
 						// Update navigation active state
 						navItems.forEach(nav => {
 							nav.classList.remove('active');
@@ -1878,7 +1887,7 @@
 							}
 						}
 					}
-				} else if (sectionId === 'home' && scrollPosition < 200) {
+				} else if (sectionId === 'home' && actualScrollY < 100) {
 					navItems.forEach(nav => {
 						nav.classList.remove('active');
 						if (nav.getAttribute('data-section') === 'home') {
@@ -1893,6 +1902,19 @@
 					}
 				}
 			});
+
+			// Fallback: hide character if at top of page
+			if (actualScrollY < 100 && sharedCharContainer) {
+				sharedCharContainer.classList.remove('visible');
+				currentActiveSection = null;
+			}
+		});
+
+		// Ensure character is hidden on initial page load
+		window.addEventListener('load', () => {
+			if (sharedCharContainer && window.scrollY < 100) {
+				sharedCharContainer.classList.remove('visible');
+			}
 		});
 	</script>
 </body>
