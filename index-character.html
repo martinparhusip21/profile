@@ -558,22 +558,27 @@
 			margin-top: 15px;
 		}
 
+		/* Content Sections Wrapper */
+		.sections-wrapper {
+			position: relative;
+			margin-left: 50px;
+			transition: margin-left 0.3s ease;
+		}
+
+		.sections-wrapper.sidebar-hidden {
+			margin-left: 0;
+		}
+
 		/* Content Sections */
 		.content-section {
 			min-height: 100vh;
 			position: relative;
 			z-index: 2;
-			margin-left: 50px;
 			padding: 60px 40px;
-			display: grid;
-			grid-template-columns: 1fr 400px;
-			gap: 40px;
-			align-items: start;
-			transition: margin-left 0.3s ease;
+			max-width: calc(100% - 450px);
 		}
 
-		.dashboard.sidebar-hidden,
-		.content-section.sidebar-hidden {
+		.dashboard.sidebar-hidden {
 			margin-left: 0;
 		}
 
@@ -670,13 +675,23 @@
 			font-weight: 600;
 		}
 
-		.character-3d-container {
-			position: sticky;
-			top: 80px;
+		.shared-character-container {
+			position: fixed;
+			right: 40px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 400px;
 			height: 600px;
 			background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05), transparent 70%);
 			border-radius: 20px;
 			border: 1px solid rgba(0, 255, 136, 0.1);
+			z-index: 3;
+			opacity: 0;
+			transition: opacity 0.5s ease;
+		}
+
+		.shared-character-container.visible {
+			opacity: 1;
 		}
 
 		/* Responsive */
@@ -686,9 +701,13 @@
 			}
 
 			.content-section {
-				grid-template-columns: 1fr 350px;
-				gap: 30px;
+				max-width: calc(100% - 400px);
 				padding: 50px 30px;
+			}
+
+			.shared-character-container {
+				width: 350px;
+				height: 550px;
 			}
 		}
 
@@ -778,13 +797,16 @@
 				padding: 8px 15px;
 			}
 
-			.content-section {
-				grid-template-columns: 1fr;
+			.sections-wrapper {
 				margin-left: 0;
+			}
+
+			.content-section {
+				max-width: 100%;
 				padding: 40px 20px 90px 20px;
 			}
 
-			.character-3d-container {
+			.shared-character-container {
 				display: none;
 			}
 
@@ -1122,139 +1144,139 @@
 		</div>
 	</div>
 
-	<!-- Experience Section -->
-	<section id="experience" class="content-section">
-		<div class="section-content">
-			<h2 class="section-title">Experience</h2>
+	<!-- Shared Character Container -->
+	<div class="shared-character-container">
+		<canvas id="section-canvas"></canvas>
+	</div>
 
-			<div class="experience-item">
-				<div class="item-header">
-					<div class="item-icon">🏦</div>
-					<div class="item-title">
-						<h3>AI Automation Engineer</h3>
-						<div class="item-meta">
-							<span>📍 Fintech Banking</span>
-							<span>⏱️ 1.5 Years</span>
+	<!-- Sections Wrapper -->
+	<div class="sections-wrapper">
+		<!-- Experience Section -->
+		<section id="experience" class="content-section">
+			<div class="section-content">
+				<h2 class="section-title">Experience</h2>
+
+				<div class="experience-item">
+					<div class="item-header">
+						<div class="item-icon">🏦</div>
+						<div class="item-title">
+							<h3>AI Automation Engineer</h3>
+							<div class="item-meta">
+								<span>📍 Fintech Banking</span>
+								<span>⏱️ 1.5 Years</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="item-description">
-					Engineered synthetic monitoring system protecting 2M+ daily active users across critical banking journeys. Built automated health checks running 500+ daily tests, providing 30+ minute advance warning for production issues.
-				</div>
-				<div class="item-tags">
-					<span class="tag">Python</span>
-					<span class="tag">Appium</span>
-					<span class="tag">Synthetic Monitoring</span>
-					<span class="tag">Banking Automation</span>
-					<span class="tag">Production Support</span>
-				</div>
-			</div>
-
-			<div class="experience-item">
-				<div class="item-header">
-					<div class="item-icon">🎓</div>
-					<div class="item-title">
-						<h3>Research Assistant</h3>
-						<div class="item-meta">
-							<span>📍 University of Indonesia</span>
-							<span>⏱️ 1 Year</span>
-						</div>
+					<div class="item-description">
+						Engineered synthetic monitoring system protecting 2M+ daily active users across critical banking journeys. Built automated health checks running 500+ daily tests, providing 30+ minute advance warning for production issues.
+					</div>
+					<div class="item-tags">
+						<span class="tag">Python</span>
+						<span class="tag">Appium</span>
+						<span class="tag">Synthetic Monitoring</span>
+						<span class="tag">Banking Automation</span>
+						<span class="tag">Production Support</span>
 					</div>
 				</div>
-				<div class="item-description">
-					Developed machine learning models for sentiment analysis research. Implemented NLP pipelines and contributed to academic publications in AI/ML domain.
-				</div>
-				<div class="item-tags">
-					<span class="tag">Machine Learning</span>
-					<span class="tag">NLP</span>
-					<span class="tag">Python</span>
-					<span class="tag">Research</span>
-				</div>
-			</div>
-		</div>
 
-		<div class="character-3d-container">
-			<canvas id="experience-canvas"></canvas>
-		</div>
-	</section>
-
-	<!-- Projects Section -->
-	<section id="projects" class="content-section">
-		<div class="section-content">
-			<h2 class="section-title">Projects</h2>
-
-			<div class="project-item">
-				<div class="item-header">
-					<div class="item-icon">🔍</div>
-					<div class="item-title">
-						<h3>Banking Automation Monitor</h3>
-						<div class="item-meta">
-							<span>⭐ Production System</span>
-							<span>👥 2M+ Users</span>
+				<div class="experience-item">
+					<div class="item-header">
+						<div class="item-icon">🎓</div>
+						<div class="item-title">
+							<h3>Research Assistant</h3>
+							<div class="item-meta">
+								<span>📍 University of Indonesia</span>
+								<span>⏱️ 1 Year</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="item-description">
-					Enterprise-grade synthetic monitoring system for critical banking journeys. Automated 15+ critical user flows with 500+ daily health checks. Integrated with alerting systems for 30+ minute advance warning.
-				</div>
-				<div class="item-tags">
-					<span class="tag">Python</span>
-					<span class="tag">Appium</span>
-					<span class="tag">Selenium</span>
-					<span class="tag">MySQL</span>
-					<span class="tag">Docker</span>
-				</div>
-			</div>
-
-			<div class="project-item">
-				<div class="item-header">
-					<div class="item-icon">🔄</div>
-					<div class="item-title">
-						<h3>N8N AI Workflows</h3>
-						<div class="item-meta">
-							<span>⭐ Open Source</span>
-							<span>🤖 AI-Powered</span>
-						</div>
+					<div class="item-description">
+						Developed machine learning models for sentiment analysis research. Implemented NLP pipelines and contributed to academic publications in AI/ML domain.
+					</div>
+					<div class="item-tags">
+						<span class="tag">Machine Learning</span>
+						<span class="tag">NLP</span>
+						<span class="tag">Python</span>
+						<span class="tag">Research</span>
 					</div>
 				</div>
-				<div class="item-description">
-					Collection of AI-powered automation workflows built with N8N. Includes document processing, data enrichment, and intelligent notification systems integrated with multiple APIs.
-				</div>
-				<div class="item-tags">
-					<span class="tag">N8N</span>
-					<span class="tag">AI Integration</span>
-					<span class="tag">APIs</span>
-					<span class="tag">Automation</span>
-				</div>
 			</div>
+		</section>
 
-			<div class="project-item">
-				<div class="item-header">
-					<div class="item-icon">💬</div>
-					<div class="item-title">
-						<h3>Sentiment Analysis System</h3>
-						<div class="item-meta">
-							<span>⭐ Research Project</span>
-							<span>📊 NLP</span>
+		<!-- Projects Section -->
+		<section id="projects" class="content-section">
+			<div class="section-content">
+				<h2 class="section-title">Projects</h2>
+
+				<div class="project-item">
+					<div class="item-header">
+						<div class="item-icon">🔍</div>
+						<div class="item-title">
+							<h3>Banking Automation Monitor</h3>
+							<div class="item-meta">
+								<span>⭐ Production System</span>
+								<span>👥 2M+ Users</span>
+							</div>
 						</div>
 					</div>
+					<div class="item-description">
+						Enterprise-grade synthetic monitoring system for critical banking journeys. Automated 15+ critical user flows with 500+ daily health checks. Integrated with alerting systems for 30+ minute advance warning.
+					</div>
+					<div class="item-tags">
+						<span class="tag">Python</span>
+						<span class="tag">Appium</span>
+						<span class="tag">Selenium</span>
+						<span class="tag">MySQL</span>
+						<span class="tag">Docker</span>
+					</div>
 				</div>
-				<div class="item-description">
-					Machine learning system for social media sentiment analysis. Implemented BERT-based models achieving high accuracy on Indonesian language text classification.
+
+				<div class="project-item">
+					<div class="item-header">
+						<div class="item-icon">🔄</div>
+						<div class="item-title">
+							<h3>N8N AI Workflows</h3>
+							<div class="item-meta">
+								<span>⭐ Open Source</span>
+								<span>🤖 AI-Powered</span>
+							</div>
+						</div>
+					</div>
+					<div class="item-description">
+						Collection of AI-powered automation workflows built with N8N. Includes document processing, data enrichment, and intelligent notification systems integrated with multiple APIs.
+					</div>
+					<div class="item-tags">
+						<span class="tag">N8N</span>
+						<span class="tag">AI Integration</span>
+						<span class="tag">APIs</span>
+						<span class="tag">Automation</span>
+					</div>
 				</div>
-				<div class="item-tags">
-					<span class="tag">Machine Learning</span>
-					<span class="tag">BERT</span>
-					<span class="tag">NLP</span>
-					<span class="tag">Python</span>
+
+				<div class="project-item">
+					<div class="item-header">
+						<div class="item-icon">💬</div>
+						<div class="item-title">
+							<h3>Sentiment Analysis System</h3>
+							<div class="item-meta">
+								<span>⭐ Research Project</span>
+								<span>📊 NLP</span>
+							</div>
+						</div>
+					</div>
+					<div class="item-description">
+						Machine learning system for social media sentiment analysis. Implemented BERT-based models achieving high accuracy on Indonesian language text classification.
+					</div>
+					<div class="item-tags">
+						<span class="tag">Machine Learning</span>
+						<span class="tag">BERT</span>
+						<span class="tag">NLP</span>
+						<span class="tag">Python</span>
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="character-3d-container">
-			<canvas id="projects-canvas"></canvas>
-		</div>
-	</section>
+		</section>
+	</div>
 
 	<script>
 		// ===== BACKGROUND PARTICLES =====
@@ -1624,24 +1646,24 @@
 					charCamera.lookAt(0, 0.3, 0);
 				}
 			}
-
-			// Resize section canvases
-			resizeSectionCanvas('experience-canvas');
-			resizeSectionCanvas('projects-canvas');
 		});
 
-		// ===== SECTION 3D CHARACTERS =====
-		function createSectionCharacter(canvasId) {
-			const canvas = document.getElementById(canvasId);
-			if (!canvas || window.innerWidth <= 968) return null;
+		// ===== SHARED SECTION CHARACTER =====
+		let sharedCharacter = null;
+		let sharedMixer = null;
+		let sharedAnimations = [];
+		let currentSectionAnimation = null;
+
+		function initSharedCharacter() {
+			const canvas = document.getElementById('section-canvas');
+			const container = document.querySelector('.shared-character-container');
+			if (!canvas || !container || window.innerWidth <= 968) return;
 
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
 			const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 
 			function resizeCanvas() {
-				const container = canvas.parentElement;
-				if (!container) return;
 				const width = container.offsetWidth;
 				const height = container.offsetHeight;
 				camera.aspect = width / height;
@@ -1663,31 +1685,33 @@
 
 			// Load character model
 			const loader = new THREE.GLTFLoader();
-			let sectionModel = null;
-			let sectionMixer = null;
 			const sectionClock = new THREE.Clock();
 
 			loader.load(modelURL, function (gltf) {
-				sectionModel = gltf.scene;
-				sectionModel.scale.set(0.4, 0.4, 0.4);
-				sectionModel.position.y = -0.5;
+				sharedCharacter = gltf.scene;
+				sharedCharacter.scale.set(0.4, 0.4, 0.4);
+				sharedCharacter.position.y = -0.5;
 
-				sectionModel.traverse((child) => {
+				sharedCharacter.traverse((child) => {
 					if (child.isMesh && child.material) {
 						child.material.emissive = new THREE.Color(0x00ff88);
 						child.material.emissiveIntensity = 0.2;
 					}
 				});
 
-				scene.add(sectionModel);
+				scene.add(sharedCharacter);
 
 				// Setup animations
 				if (gltf.animations && gltf.animations.length > 0) {
-					sectionMixer = new THREE.AnimationMixer(sectionModel);
-					const idleAnimation = gltf.animations.find(anim => anim.name.toLowerCase().includes('idle'));
+					sharedMixer = new THREE.AnimationMixer(sharedCharacter);
+					sharedAnimations = gltf.animations;
+
+					// Play idle animation by default
+					const idleAnimation = sharedAnimations.find(anim => anim.name.toLowerCase().includes('idle'));
 					if (idleAnimation) {
-						const action = sectionMixer.clipAction(idleAnimation);
+						const action = sharedMixer.clipAction(idleAnimation);
 						action.play();
+						currentSectionAnimation = 'idle';
 					}
 				}
 			});
@@ -1696,28 +1720,57 @@
 			function animate() {
 				requestAnimationFrame(animate);
 				const delta = sectionClock.getDelta();
-				if (sectionMixer) sectionMixer.update(delta);
+				if (sharedMixer) sharedMixer.update(delta);
 				renderer.render(scene, camera);
 			}
 			animate();
 
-			return resizeCanvas;
+			// Resize handler
+			window.addEventListener('resize', () => {
+				if (window.innerWidth > 968) {
+					resizeCanvas();
+				}
+			});
 		}
 
-		// Initialize section characters
-		const resizeSectionCanvas = (canvasId) => {
-			const canvas = document.getElementById(canvasId);
-			if (!canvas || window.innerWidth <= 968) return;
-			const container = canvas.parentElement;
-			if (!container) return;
-			const width = container.offsetWidth;
-			const height = container.offsetHeight;
-			// Canvas will be resized by individual renderers
-		};
+		// Play specific animation based on section
+		function playSectionAnimation(sectionName) {
+			if (!sharedMixer || !sharedAnimations.length) return;
+
+			let targetAnimation = null;
+
+			// Select animation based on section
+			if (sectionName === 'experience') {
+				// Play wave or thumbs up animation for experience
+				targetAnimation = sharedAnimations.find(anim =>
+					anim.name.toLowerCase().includes('wave') ||
+					anim.name.toLowerCase().includes('yes')
+				);
+			} else if (sectionName === 'projects') {
+				// Play dance or jump animation for projects
+				targetAnimation = sharedAnimations.find(anim =>
+					anim.name.toLowerCase().includes('jump') ||
+					anim.name.toLowerCase().includes('dance')
+				);
+			}
+
+			// If no specific animation found, use idle
+			if (!targetAnimation) {
+				targetAnimation = sharedAnimations.find(anim => anim.name.toLowerCase().includes('idle'));
+			}
+
+			// Only change if different from current
+			if (targetAnimation && targetAnimation.name !== currentSectionAnimation) {
+				sharedMixer.stopAllAction();
+				const action = sharedMixer.clipAction(targetAnimation);
+				action.reset();
+				action.play();
+				currentSectionAnimation = targetAnimation.name;
+			}
+		}
 
 		setTimeout(() => {
-			createSectionCharacter('experience-canvas');
-			createSectionCharacter('projects-canvas');
+			initSharedCharacter();
 		}, 1000);
 
 		// ===== NAVIGATION =====
@@ -1730,16 +1783,16 @@
 			const isHidden = navSidebar.classList.toggle('hidden');
 			navToggle.textContent = isHidden ? '▶' : '◀';
 
-			// Toggle margin on dashboard and content sections
+			// Toggle margin on dashboard and sections wrapper
 			const dashboard = document.querySelector('.dashboard');
-			const contentSections = document.querySelectorAll('.content-section');
+			const sectionsWrapper = document.querySelector('.sections-wrapper');
 
 			if (isHidden) {
 				dashboard.classList.add('sidebar-hidden');
-				contentSections.forEach(section => section.classList.add('sidebar-hidden'));
+				if (sectionsWrapper) sectionsWrapper.classList.add('sidebar-hidden');
 			} else {
 				dashboard.classList.remove('sidebar-hidden');
-				contentSections.forEach(section => section.classList.remove('sidebar-hidden'));
+				if (sectionsWrapper) sectionsWrapper.classList.remove('sidebar-hidden');
 			}
 		});
 
@@ -1765,7 +1818,10 @@
 			});
 		});
 
-		// Update active nav on scroll
+		// Update active nav on scroll and manage shared character
+		let currentActiveSection = null;
+		const sharedCharContainer = document.querySelector('.shared-character-container');
+
 		window.addEventListener('scroll', () => {
 			const sections = ['home', 'experience', 'projects'];
 			const scrollPosition = window.scrollY + 200;
@@ -1777,12 +1833,29 @@
 					const sectionHeight = section.offsetHeight;
 
 					if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+						// Update navigation active state
 						navItems.forEach(nav => {
 							nav.classList.remove('active');
 							if (nav.getAttribute('data-section') === sectionId) {
 								nav.classList.add('active');
 							}
 						});
+
+						// Show/hide shared character and trigger animation
+						if (sharedCharContainer) {
+							if (sectionId === 'experience' || sectionId === 'projects') {
+								sharedCharContainer.classList.add('visible');
+
+								// Trigger animation change if section changed
+								if (currentActiveSection !== sectionId) {
+									playSectionAnimation(sectionId);
+									currentActiveSection = sectionId;
+								}
+							} else {
+								sharedCharContainer.classList.remove('visible');
+								currentActiveSection = null;
+							}
+						}
 					}
 				} else if (sectionId === 'home' && scrollPosition < 200) {
 					navItems.forEach(nav => {
@@ -1791,6 +1864,12 @@
 							nav.classList.add('active');
 						}
 					});
+
+					// Hide character when at home
+					if (sharedCharContainer) {
+						sharedCharContainer.classList.remove('visible');
+						currentActiveSection = null;
+					}
 				}
 			});
 		});
