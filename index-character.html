@@ -149,15 +149,20 @@
 		/* Main Layout Container */
 		.dashboard {
 			position: relative;
-			width: 100%;
+			width: calc(100% - 50px);
 			min-height: 100vh;
 			display: grid;
-			grid-template-columns: 350px 1fr 380px;
+			grid-template-columns: 320px 1fr 340px;
 			gap: 0;
 			z-index: 2;
 			padding: 20px;
 			margin-left: 50px;
 			transition: margin-left 0.3s ease;
+		}
+
+		.dashboard.sidebar-hidden {
+			width: 100%;
+			margin-left: 0;
 		}
 
 
@@ -166,8 +171,9 @@
 			background: rgba(10, 14, 26, 0.75);
 			backdrop-filter: blur(20px);
 			border-right: 1px solid rgba(0, 255, 136, 0.1);
-			padding: 30px 20px;
+			padding: 30px 15px;
 			overflow-y: auto;
+			overflow-x: hidden;
 		}
 
 		.sidebar::-webkit-scrollbar {
@@ -382,8 +388,9 @@
 			background: rgba(10, 14, 26, 0.75);
 			backdrop-filter: blur(20px);
 			border-left: 1px solid rgba(0, 255, 136, 0.1);
-			padding: 30px 20px;
+			padding: 30px 15px;
 			overflow-y: auto;
+			overflow-x: hidden;
 		}
 
 		.progress-panel::-webkit-scrollbar {
@@ -687,27 +694,32 @@
 			border: 1px solid rgba(0, 255, 136, 0.1);
 			z-index: 3;
 			opacity: 0;
-			transition: opacity 0.5s ease;
+			visibility: hidden;
+			pointer-events: none;
+			transition: opacity 0.5s ease, visibility 0.5s ease;
 		}
 
 		.shared-character-container.visible {
 			opacity: 1;
+			visibility: visible;
+			pointer-events: auto;
 		}
 
 		/* Responsive */
 		@media (max-width: 1200px) {
 			.dashboard {
-				grid-template-columns: 300px 1fr 320px;
+				grid-template-columns: 280px 1fr 300px;
 			}
 
 			.content-section {
-				max-width: calc(100% - 400px);
-				padding: 50px 30px;
+				max-width: calc(100% - 380px);
+				padding: 50px 25px;
 			}
 
 			.shared-character-container {
 				width: 350px;
 				height: 550px;
+				right: 30px;
 			}
 		}
 
