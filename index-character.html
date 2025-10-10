@@ -1835,80 +1835,98 @@
 
 				// Smooth scroll to section
 				const sectionId = item.getAttribute('data-section');
-				const section = document.getElementById(sectionId);
 
-				if (section) {
-					section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				} else if (sectionId === 'home') {
+				if (sectionId === 'home') {
 					window.scrollTo({ top: 0, behavior: 'smooth' });
+				} else {
+					const section = document.getElementById(sectionId);
+					if (section) {
+						section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
 				}
 			});
 		});
 
-		// Update active nav on scroll and manage shared character
+		// ===== INTERSECTION OBSERVER FOR SECTIONS =====
 		let currentActiveSection = null;
+		let isInExperienceOrProjects = false;
 
-		window.addEventListener('scroll', () => {
-			const sections = ['home', 'experience', 'projects'];
-			const scrollPosition = window.scrollY + 200;
-			const actualScrollY = window.scrollY;
-			let sectionFound = false;
+		// Create Intersection Observer for better section detection
+		const observerOptions = {
+			root: null,
+			rootMargin: '-20% 0px -20% 0px', // Only trigger when section is well into viewport
+			threshold: [0, 0.3, 0.5, 0.7, 1]
+		};
 
-			sections.forEach(sectionId => {
-				const section = document.getElementById(sectionId);
-				if (section) {
-					const sectionTop = section.offsetTop;
-					const sectionHeight = section.offsetHeight;
+		const sectionObserver = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				const sectionId = entry.target.id;
 
-					if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-						sectionFound = true;
-
-						// Update navigation active state
-						navItems.forEach(nav => {
-							nav.classList.remove('active');
-							if (nav.getAttribute('data-section') === sectionId) {
-								nav.classList.add('active');
-							}
-						});
-
-						// Show/hide shared character and trigger animation
-						if (sharedCharContainer) {
-							if (sectionId === 'experience' || sectionId === 'projects') {
-								sharedCharContainer.classList.add('visible');
-
-								// Trigger animation change if section changed
-								if (currentActiveSection !== sectionId) {
-									playSectionAnimation(sectionId);
-									currentActiveSection = sectionId;
-								}
-							} else {
-								sharedCharContainer.classList.remove('visible');
-								currentActiveSection = null;
-							}
-						}
-					}
-				} else if (sectionId === 'home' && actualScrollY < 100) {
+				// Check if section is significantly visible (at least 50% in viewport)
+				if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+					// Update navigation
+					const navSection = sectionId === 'home-section' ? 'home' : sectionId;
 					navItems.forEach(nav => {
 						nav.classList.remove('active');
-						if (nav.getAttribute('data-section') === 'home') {
+						if (nav.getAttribute('data-section') === navSection) {
 							nav.classList.add('active');
 						}
 					});
 
-					// Hide character when at home
+					// Handle character visibility and animation
 					if (sharedCharContainer) {
-						sharedCharContainer.classList.remove('visible');
-						currentActiveSection = null;
+						if (sectionId === 'experience' || sectionId === 'projects') {
+							isInExperienceOrProjects = true;
+							sharedCharContainer.classList.add('visible');
+
+							// Trigger animation change if section changed
+							if (currentActiveSection !== sectionId) {
+								playSectionAnimation(sectionId);
+								currentActiveSection = sectionId;
+							}
+						} else {
+							isInExperienceOrProjects = false;
+							sharedCharContainer.classList.remove('visible');
+							currentActiveSection = null;
+						}
+					}
+				}
+				// If section is leaving viewport
+				else if (!entry.isIntersecting) {
+					if (sectionId === 'experience' || sectionId === 'projects') {
+						// Check if we're still in any experience/projects section
+						const experienceSection = document.getElementById('experience');
+						const projectsSection = document.getElementById('projects');
+
+						const expRect = experienceSection ? experienceSection.getBoundingClientRect() : null;
+						const projRect = projectsSection ? projectsSection.getBoundingClientRect() : null;
+
+						const stillInRange = (expRect && expRect.top < window.innerHeight && expRect.bottom > 0) ||
+						                     (projRect && projRect.top < window.innerHeight && projRect.bottom > 0);
+
+						if (!stillInRange && sharedCharContainer) {
+							sharedCharContainer.classList.remove('visible');
+							currentActiveSection = null;
+							isInExperienceOrProjects = false;
+						}
 					}
 				}
 			});
+		}, observerOptions);
 
-			// Fallback: hide character if at top of page
-			if (actualScrollY < 100 && sharedCharContainer) {
-				sharedCharContainer.classList.remove('visible');
-				currentActiveSection = null;
-			}
+		// Observe all sections
+		const sectionsToObserve = document.querySelectorAll('#experience, #projects');
+		const dashboardSection = document.querySelector('.dashboard');
+
+		sectionsToObserve.forEach(section => {
+			sectionObserver.observe(section);
 		});
+
+		// Observe dashboard as "home" section
+		if (dashboardSection) {
+			dashboardSection.id = 'home-section';
+			sectionObserver.observe(dashboardSection);
+		}
 
 		// Ensure character is hidden on initial page load
 		window.addEventListener('load', () => {
