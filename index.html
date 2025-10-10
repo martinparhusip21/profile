@@ -155,6 +155,14 @@
 			background: rgba(255, 255, 255, 0.05);
 			border: 1px solid transparent;
 			text-decoration: none;
+			color: var(--text-secondary);
+		}
+
+		.nav-item svg {
+			width: 22px;
+			height: 22px;
+			stroke: currentColor;
+			transition: all 0.3s ease;
 		}
 
 		.nav-item:hover {
@@ -162,12 +170,18 @@
 			border-color: rgba(72, 239, 160, 0.3);
 			transform: scale(1.1);
 			box-shadow: 0 0 20px rgba(72, 239, 160, 0.3);
+			color: var(--primary-green);
 		}
 
 		.nav-item.active {
-			background: rgba(72, 239, 160, 0.1);
+			background: rgba(72, 239, 160, 0.15);
 			border-color: rgba(72, 239, 160, 0.5);
 			box-shadow: 0 0 25px rgba(72, 239, 160, 0.4);
+			color: var(--primary-green);
+		}
+
+		.nav-item.active svg {
+			filter: drop-shadow(0 0 8px rgba(72, 239, 160, 0.6));
 		}
 
 		/* Main Layout Container */
@@ -734,18 +748,19 @@
 				left: 0;
 				top: auto;
 				width: 100%;
-				height: 60px;
+				height: 75px;
 				flex-direction: row;
 				justify-content: center;
 				align-items: center;
-				gap: 15px;
+				gap: 20px;
 				border-right: none;
-				border-top: 1px solid rgba(72, 239, 160, 0.08);
+				border-top: 1px solid rgba(72, 239, 160, 0.15);
 				padding: 0 20px;
 				transform: translateX(0) !important;
-				background: rgba(13, 18, 17, 0.98);
-				backdrop-filter: blur(20px);
+				background: rgba(13, 18, 17, 0.95);
+				backdrop-filter: blur(30px);
 				z-index: 100;
+				box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
 			}
 
 			.nav-sidebar.hidden {
@@ -757,14 +772,19 @@
 			}
 
 			.nav-item {
-				width: 50px;
-				height: 50px;
+				width: 55px;
+				height: 55px;
 				font-size: 24px;
-				border-radius: 12px;
+				border-radius: 15px;
+			}
+
+			.nav-item svg {
+				width: 26px;
+				height: 26px;
 			}
 
 			.nav-item.active {
-				background: rgba(72, 239, 160, 0.1);
+				background: rgba(72, 239, 160, 0.15);
 			}
 
 			.dashboard {
@@ -774,7 +794,7 @@
 				gap: 0;
 				min-height: 100vh;
 				margin-left: 0;
-				padding-bottom: 60px;
+				padding-bottom: 75px;
 			}
 
 			.sidebar {
@@ -836,7 +856,7 @@
 
 			.content-section {
 				max-width: 100%;
-				padding: 40px 20px 80px 20px;
+				padding: 40px 20px 95px 20px;
 				min-height: auto;
 			}
 
@@ -1011,9 +1031,28 @@
 				<span></span>
 			</div>
 		</div>
-		<a href="#home" class="nav-item active" data-section="home" title="Home">🏠</a>
-		<a href="#experience" class="nav-item" data-section="experience" title="Experience">💼</a>
-		<a href="#projects" class="nav-item" data-section="projects" title="Projects">📱</a>
+		<a href="#home" class="nav-item active" data-section="home" title="Home">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+				<polyline points="9 22 9 12 15 12 15 22"></polyline>
+			</svg>
+		</a>
+		<a href="#experience" class="nav-item" data-section="experience" title="Experience">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M20 7h-9"></path>
+				<path d="M14 17H5"></path>
+				<circle cx="17" cy="17" r="3"></circle>
+				<circle cx="7" cy="7" r="3"></circle>
+			</svg>
+		</a>
+		<a href="#projects" class="nav-item" data-section="projects" title="Projects">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M6 3v12"></path>
+				<circle cx="18" cy="6" r="3"></circle>
+				<circle cx="6" cy="18" r="3"></circle>
+				<path d="M18 9a9 9 0 0 1-9 9"></path>
+			</svg>
+		</a>
 	</nav>
 
 	<!-- Main Dashboard Layout -->
